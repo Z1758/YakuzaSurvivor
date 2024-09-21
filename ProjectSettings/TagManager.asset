@@ -11,6 +11,12 @@ TagManager:
   - 
   - Water
   - UI
+  - Player
+  - PlayerPenetration
+  - 
+  - Enemy
+  - 
+  - PlayerHixbox
   - 
   - 
   - 
@@ -24,13 +30,7 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Ground
   - 
   - 
   - 
