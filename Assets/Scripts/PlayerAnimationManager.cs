@@ -29,51 +29,22 @@ public class PlayerAnimationManager : MonoBehaviour
     private void Awake()
     {
         SetAnim(0);
-
-
     }
 
     public void SetAnim(int index)
     {
+       
+        if(curStyle.weapon != null)
+            curStyle.weapon.SetActive(false);
+
         curStyle = styles[index];
         anim.runtimeAnimatorController = curStyle.anim;
 
-    }
-    public void SetWFS()
-    {
-        /*
-          atkEndTime = new WaitForSeconds[curStyle.atkClips.Length];
-          atkInputTime = new WaitForSeconds[curStyle.atkClips.Length];
-          fEndTime = new WaitForSeconds[curStyle.fClips.Length];
-          lEndTime = new WaitForSeconds[curStyle.fClips.Length];
-          lAtkInputTime = new WaitForSeconds[curStyle.fClips.Length];
-          lAtkEndTime = new WaitForSeconds[curStyle.fClips.Length];
-
-
-          for (int i = 0; i < curStyle.atkClips.Length; i++)
-          {
-
-              atkEndTime[i] = new WaitForSeconds(curStyle.atkClips[i].length * curStyle.atkEndTimeRatio[i]);
-
-
-              atkInputTime[i] = new WaitForSeconds(curStyle.atkClipsEnd[i]);
-
-
-              fEndTime[i] = new WaitForSeconds(curStyle.fClips[i].length * 0.95f);
-
-              lEndTime[i] = new WaitForSeconds(curStyle.loopAtkTime[i]);
-
-              lAtkInputTime[i] = new WaitForSeconds(curStyle.loopAtkInputTime[i]);
-
-              lAtkEndTime[i] = new WaitForSeconds(curStyle.loopAtkEndTime[i]);
-          }
-
-          changeTime = new WaitForSeconds(curStyle.changeTime);
-          */
-
+        if (curStyle.weapon != null)
+            curStyle.weapon.SetActive(true);
     }
 
-
+ 
     public bool GetAniName(string name)
     {
 

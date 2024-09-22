@@ -13,8 +13,10 @@ public class PlayController : MonoBehaviour
    
     [SerializeField] private Transform cameraPos;
     [SerializeField] PlayerAnimationManager playerAnimationManager;
-    [SerializeField] HitboxManager hitboxManager;
+    [SerializeField] PlayerSoundManager playerSoundManager;
 
+    [SerializeField] HitboxManager hitboxManager;
+   
     [SerializeField] private float speed;
     [SerializeField] private float defaultSpeed;
     [SerializeField] private float rotateSpeed;
@@ -96,6 +98,8 @@ public class PlayController : MonoBehaviour
 
                 ChangeState.Instance.index = index - 1;
                 ps.SetState(ChangeState.Instance);
+              
+                BGM_Manager.Instance.ChangeBGM(ChangeState.Instance.index);
             }
 
 
@@ -204,25 +208,30 @@ public class PlayController : MonoBehaviour
 
         isAtk = true;
 
-        if (dir.sqrMagnitude >= 1)
+        if (dir.sqrMagnitude >= 0.1)
         {
             Quaternion lookRot = Quaternion.LookRotation(dir);
             transform.rotation = lookRot;
         }
 
         playerAnimationManager.AtkAniCoroutine(atkComboCnt, true);
+
         hitboxManager.AtkHitboxCoroutine(atkComboCnt);
 
         atkComboCnt++;
 
 
     }
+
+  
+
     public void FAtk()
     {
 
         isAtk = true;
 
         playerAnimationManager.AtkAniCoroutine(atkComboCnt-1, false);
+
         playerAnimationManager.PlayFAtk(atkComboCnt - 1 );
         hitboxManager.FAtkHitboxCoroutine(atkComboCnt -1);
         atkComboCnt = 0;
@@ -230,7 +239,7 @@ public class PlayController : MonoBehaviour
 
 
     }
-
+ 
     public void LoopAtkEnter()
     {
 
@@ -348,6 +357,8 @@ public class PlayController : MonoBehaviour
         hitboxManager.SetBox(ChangeState.Instance.index);
         playerAnimationManager.SetAnim(ChangeState.Instance.index);
         playerAnimationManager.ChangeAniCoroutine(ChangeState.Instance.index);
+        playerSoundManager.SetSound(ChangeState.Instance.index);
+
         ComboReset();
         isAtk = true;
 

@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class BattleStyle : MonoBehaviour
 {
-  
+
+    [SerializeField] public GameObject weapon;
     [SerializeField] public AnimationClip styleChangeAni;
     [SerializeField] public RuntimeAnimatorController anim;
 
