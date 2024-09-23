@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MobPool : MonoBehaviour
 {
+    [SerializeField] Transform[] spawnPoints;
     public static MobPool Instance { get; private set; }
     [SerializeField] GameObject prefab;
     [SerializeField] int poolSize;
@@ -52,10 +53,10 @@ public class MobPool : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
             if (queue.Count != 0)
             {
-                float ran1 = Random.Range(-15, 15);
-                float ran2 = Random.Range(-15, 15);
+                int ran = Random.Range(0, spawnPoints.Length);
+              
                 GameObject m = queue.Dequeue();
-                m.transform.position = new Vector3(ran1, 0, ran2);
+                m.transform.position = spawnPoints[ran].position;
                 m.SetActive(true);
                 activeMob.Add(m);
 

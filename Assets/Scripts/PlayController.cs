@@ -10,7 +10,8 @@ public class PlayController : MonoBehaviour
 
     [SerializeField] public Animator anim;
     [SerializeField] private CharacterController cc;
-   
+    [SerializeField] private Rigidbody rigid;
+
     [SerializeField] private Transform cameraPos;
     [SerializeField] PlayerAnimationManager playerAnimationManager;
     [SerializeField] PlayerSoundManager playerSoundManager;
@@ -187,9 +188,7 @@ public class PlayController : MonoBehaviour
 
     public void Move()
     {
-
-       
-        cc.Move(dir * speed * Time.deltaTime);
+          cc.Move(dir * speed * Time.deltaTime);
 
     }
     public void Rotate()

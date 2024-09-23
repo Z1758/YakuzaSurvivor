@@ -38,17 +38,20 @@ public class HitboxManager : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (atkType || ChangeState.Instance.index == 3)
-        {
-
-           // other.GetComponent<DisMob>().Down();
+        {   
             //다운
+            if (other.TryGetComponent<DisMob>(out DisMob component))
+                component.Down();
+         
         }
         else
         {
-          //  other.GetComponent<DisMob>().Hit();
             //경직
+            if (other.TryGetComponent<DisMob>(out DisMob component))
+                component.Hit();
+            
         }
-            Debug.Log(other.name);
+        
 
     }
 
