@@ -53,14 +53,9 @@ public class DisMob : MonoBehaviour
         navMeshPath = new NavMeshPath();
     }
  
-
-    private void Update()
-    {
-       
-    }
-
     private void OnEnable()
     {
+      
         StopAllCoroutines(); 
         hp = maxhp;
         atkCooldown = 0;
@@ -151,9 +146,7 @@ public class DisMob : MonoBehaviour
         }
 
 
-        AgentReset();
-        agent.enabled = false;
-        obstacle.enabled = true;
+      
         Idle();
 
     }
@@ -168,9 +161,11 @@ public class DisMob : MonoBehaviour
     
     IEnumerator IdleCorutine()
     {
-      
-       
-       
+
+        AgentReset();
+        agent.enabled = false;
+        obstacle.enabled = true;
+
         anim.SetInteger("AniInt", EnumConvert<int>.Cast(AniState.Idle));
         while (atkCooldown > 0)
         {
