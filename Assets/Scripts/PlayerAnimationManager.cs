@@ -26,6 +26,8 @@ public class PlayerAnimationManager : MonoBehaviour
     Coroutine atkAniEnd;
     Coroutine loopCountCoroutine;
 
+    [SerializeField] GameObject darkUI;
+
     private void Awake()
     {
         SetAnim(0);
@@ -33,15 +35,25 @@ public class PlayerAnimationManager : MonoBehaviour
 
     public void SetAnim(int index)
     {
-       
-        if(curStyle.weapon != null)
+
+        if (curStyle.weapon != null)
+        {
+            CharacterTrail.Instance.OffDaggerTrail();
             curStyle.weapon.SetActive(false);
+        }
 
         curStyle = styles[index];
         anim.runtimeAnimatorController = curStyle.anim;
 
         if (curStyle.weapon != null)
+        {
             curStyle.weapon.SetActive(true);
+            if(index == 3)
+            {
+                CharacterTrail.Instance.OnDaggerTrail();
+            }
+
+        }
     }
 
  
@@ -116,7 +128,20 @@ public class PlayerAnimationManager : MonoBehaviour
 
 
     }
- 
+    public IEnumerator ChangeAniEnd(WaitForSecondsRealtime time)
+    {
+
+        Time.timeScale = 0.2f;
+        darkUI.SetActive(true);
+        yield return time;
+       
+        Time.timeScale = 1.0f;
+        darkUI.SetActive(false);
+        player.FAtkEnd();
+
+
+
+    }
 
     public void LoopAtkAniCoroutine(int cnt)
     {
@@ -177,7 +202,7 @@ public class PlayerAnimationManager : MonoBehaviour
 
 
         anim.Play(curStyle.styleChangeAni.name);
-        atkAniEnd = StartCoroutine(FAtkAniEnd(curStyle.changeTimeWFS));
+        atkAniEnd = StartCoroutine(ChangeAniEnd(curStyle.changeTimeWFS));
 
     }
 

@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DaggerTrail : MonoBehaviour
+public class Trails : MonoBehaviour
 {
 
     [SerializeField] GameObject trailPrefab;
     [SerializeField] SkinnedMeshRenderer smr;
     List<BakeTrail> bts;
-
+    List<GameObject> trails;
     [SerializeField] float delay;
     [SerializeField] int trailCnt;
     WaitForSeconds delayWFS;
@@ -24,12 +24,17 @@ public class DaggerTrail : MonoBehaviour
 
     private void Awake()
     {
+        trails = new List<GameObject> ();
         bts = new List<BakeTrail>();
         for (int i = 0; i < trailCnt; i++)
         {
-            bts.Add(Instantiate(trailPrefab).GetComponent<BakeTrail>());
+            GameObject trail = Instantiate(trailPrefab);
+            trails.Add(trail);
+            bts.Add(trail.GetComponent<BakeTrail>());
             bts[i].SetSMR(smr);
             bts[i].SetMinus(trailCnt);
+            trail.SetActive(false);
+
         }
     }
 
@@ -77,5 +82,29 @@ public class DaggerTrail : MonoBehaviour
             yield return delayWFS;
         }
 
+    }
+    public void OnTrail(Color color)
+    {
+        for (int i = 0; i < trails.Count; i++)
+        {
+            bts[i].SetColor(color);
+            trails[i].SetActive(true);
+        }
+    }
+
+    public void OnTrail()
+    {
+        for (int i = 0; i < trails.Count; i++)
+        {
+         
+            trails[i].SetActive(true);
+        }
+    }
+    public void OffTrail()
+    {
+        for (int i = 0; i < trails.Count; i++)
+        {
+            trails[i].SetActive(false);
+        }
     }
 }

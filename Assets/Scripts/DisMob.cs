@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
@@ -8,7 +9,10 @@ using UnityEngine.SocialPlatforms;
 
 public class DisMob : MonoBehaviour
 {
+    [SerializeField] NavMeshObstacle obstacle;
     [SerializeField] NavMeshAgent agent;
+    NavMeshPath navMeshPath;
+
     [SerializeField] Transform player;
     [SerializeField] Animator anim;
 
@@ -46,28 +50,12 @@ public class DisMob : MonoBehaviour
 
         agent = GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
+        navMeshPath = new NavMeshPath();
     }
  
-
-    private void Update()
-    {
-        /*
-     
-        if (Input.GetKeyDown(KeyCode.Z) && isDown == false)
-        {
-
-            Hit();
-        }
-
-        if (Input.GetKeyDown(KeyCode.X) )
-        {
-
-            Down();
-        }*/
-    }
-
     private void OnEnable()
     {
+      
         StopAllCoroutines(); 
         hp = maxhp;
         atkCooldown = 0;
@@ -105,10 +93,10 @@ public class DisMob : MonoBehaviour
     public void Down()
     {
 
-        
-        agent.isStopped = true;
+
+        AgentReset();
         isDown = true;
-        agent.ResetPath();
+       
         StopAllCoroutines();
         transform.LookAt(player.position);
         cooldown = StartCoroutine(AttackCoolDownCorutine());
@@ -123,8 +111,7 @@ public class DisMob : MonoBehaviour
         {
             return;
         }
-        agent.isStopped = true;
-        agent.ResetPath();
+        AgentReset();
         StopAllCoroutines();
         transform.LookAt(player.position);
         cooldown = StartCoroutine(AttackCoolDownCorutine());
@@ -132,29 +119,53 @@ public class DisMob : MonoBehaviour
     }
     IEnumerator TraceCorutine()
     {
-     
-      
+       
+        obstacle.enabled = false;
+        yield return wfs;
+        agent.enabled = true;
+        
         agent.isStopped = false;
 
         while ((player.position - transform.position).sqrMagnitude > range)
         {
 
+             agent.CalculatePath(player.position, navMeshPath);
+            
+             
+            
+
             anim.SetInteger("AniInt", EnumConvert<int>.Cast(AniState.Run));
-            agent.SetDestination(player.position);
+           // agent.SetDestination(player.position);
+          
+            
+
+            agent.SetPath(navMeshPath);
             yield return wfs;
 
 
         }
-        agent.isStopped = true;
-        agent.ResetPath();
+
+
+      
         Idle();
 
     }
+
+    void AgentReset()
+    {
+        if (agent.enabled == false)
+            return;
+        agent.isStopped = true;
+        agent.ResetPath();
+    }
+    
     IEnumerator IdleCorutine()
     {
-      
-       
-       
+
+        AgentReset();
+        agent.enabled = false;
+        obstacle.enabled = true;
+
         anim.SetInteger("AniInt", EnumConvert<int>.Cast(AniState.Idle));
         while (atkCooldown > 0)
         {

@@ -36,7 +36,7 @@ public class BattleStyle : MonoBehaviour
 
 
 
-    public WaitForSeconds changeTimeWFS;
+    public WaitForSecondsRealtime changeTimeWFS;
 
 
     private void Awake()
@@ -80,7 +80,7 @@ public class BattleStyle : MonoBehaviour
 
             lAtkEndTime[i] = new WaitForSeconds(loopAtkEndTime[i]);
         }
-        changeTimeWFS = new WaitForSeconds(changeTime);
+        changeTimeWFS = new WaitForSecondsRealtime(changeTime);
     }
 
 

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MobPool : MonoBehaviour
 {
+    [SerializeField] Transform[] spawnPoints;
     public static MobPool Instance { get; private set; }
     [SerializeField] GameObject prefab;
     [SerializeField] int poolSize;
@@ -21,11 +22,8 @@ public class MobPool : MonoBehaviour
         {
             Destroy(gameObject);
         }
-    }
 
 
-    void Start()
-    {
         activeMob = new List<GameObject>();
         queue = new Queue<GameObject>();
 
@@ -33,33 +31,49 @@ public class MobPool : MonoBehaviour
         {
             GameObject m = Instantiate(prefab);
             m.SetActive(false);
-            
-            if(m.TryGetComponent<DisMob>(out DisMob me)){
+
+            if (m.TryGetComponent<DisMob>(out DisMob me))
+            {
                 me.dEvent += ReturnPool;
             }
-               
+
             queue.Enqueue(m);
         }
 
-        StartCoroutine(SpawnMob());
     }
 
 
-    IEnumerator SpawnMob()
+    void Start()
+    {
+      
+
+    }
+
+    public void StartSpawn()
+    {
+        StartCoroutine(SpawnMobCorouinte());
+    }
+
+    IEnumerator SpawnMobCorouinte()
     {
         while (true)
         {
             yield return new WaitForSeconds(0.1f);
-            if (queue.Count != 0)
-            {
-                float ran1 = Random.Range(-15, 15);
-                float ran2 = Random.Range(-15, 15);
-                GameObject m = queue.Dequeue();
-                m.transform.position = new Vector3(ran1, 0, ran2);
-                m.SetActive(true);
-                activeMob.Add(m);
+            Spawn();
+        }
+    }
 
-            }
+    void Spawn()
+    {
+        if (queue.Count != 0)
+        {
+            int ran = Random.Range(0, spawnPoints.Length);
+
+            GameObject m = queue.Dequeue();
+            m.transform.position = spawnPoints[ran].position;
+            m.SetActive(true);
+            activeMob.Add(m);
+
         }
     }
 
