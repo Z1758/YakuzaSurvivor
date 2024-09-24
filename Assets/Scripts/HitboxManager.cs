@@ -37,7 +37,7 @@ public class HitboxManager : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (atkType || ChangeState.Instance.index == 3)
+        if (atkType || PlayerStat.Instance.StyleIndex  == 3)
         {   
             //´Ù¿î
             if (other.TryGetComponent<DisMob>(out DisMob component))

@@ -83,11 +83,13 @@ public class Trails : MonoBehaviour
         }
 
     }
-    public void OnTrail(Color color)
+    public void OnTrails(Color color)
     {
         for (int i = 0; i < trails.Count; i++)
         {
             bts[i].SetColor(color);
+            bts[i].gameObject.transform.position = transform.position;
+            bts[i].gameObject.transform.rotation = transform.rotation;
             trails[i].SetActive(true);
         }
     }

@@ -95,13 +95,13 @@ public class PlayController : MonoBehaviour
                 ps.SetState(AttackState.Instance);
             }
 
-            if (ChangeState.Instance.index != index - 1 && index != 0)
+            if (stat.StyleIndex != index - 1 && index != 0)
             {
 
-                ChangeState.Instance.index = index - 1;
+                stat.StyleIndex = index - 1;
                 ps.SetState(ChangeState.Instance);
               
-                BGM_Manager.Instance.ChangeBGM(ChangeState.Instance.index);
+                BGM_Manager.Instance.ChangeBGM(stat.StyleIndex);
             }
 
 
@@ -150,7 +150,7 @@ public class PlayController : MonoBehaviour
 
         if (Mouse.current.rightButton.wasPressedThisFrame)
         {
-            if (ChangeState.Instance.index == 3)
+            if (stat.StyleIndex == 3)
             {
                 return null;
             }
@@ -354,10 +354,10 @@ public class PlayController : MonoBehaviour
 
     public void ChangeStyle()
     {
-        hitboxManager.SetBox(ChangeState.Instance.index);
-        playerAnimationManager.SetAnim(ChangeState.Instance.index);
-        playerAnimationManager.ChangeAniCoroutine(ChangeState.Instance.index);
-        playerSoundManager.SetSound(ChangeState.Instance.index);
+        hitboxManager.SetBox(stat.StyleIndex);
+        playerAnimationManager.SetAnim(stat.StyleIndex);
+        playerAnimationManager.ChangeAniCoroutine(stat.StyleIndex);
+        playerSoundManager.SetSound(stat.StyleIndex);
 
         ComboReset();
         isAtk = true;

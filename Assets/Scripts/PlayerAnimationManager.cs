@@ -80,7 +80,7 @@ public class PlayerAnimationManager : MonoBehaviour
 
         if (type)
         {
-            if (ChangeState.Instance.index == 3)
+            if (PlayerStat.Instance.StyleIndex == 3)
             {
                 player.ColOff();
             }
@@ -106,7 +106,7 @@ public class PlayerAnimationManager : MonoBehaviour
         yield return time;
 
         player.AtkStateChange();
-        if (ChangeState.Instance.index == 3)
+        if (PlayerStat.Instance.StyleIndex == 3)
         {
             player.ColOn();
         }

@@ -31,11 +31,6 @@ public class BakeTrail : MonoBehaviour
       
     }
 
-    private void Update()
-    {
-       
-    }
-
 
     public void SetColor(Color color)
     {

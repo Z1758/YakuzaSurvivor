@@ -7,17 +7,20 @@ public class PlayerStatController : MonoBehaviour
 {
     [SerializeField] PlayerStat model;
     [SerializeField] Slider hpSlider;
+    [SerializeField] Image styleImageUI;
+    [SerializeField] Sprite[] styleImages;
     // Start is called before the first frame update
 
     private void OnEnable()
     {
-        model.OnHPCHanged += UpdateHP;
+        model.OnHPChanged += UpdateHP;
+        model.OnStyleChanged += UpdateStyle;
   
     }
     private void OnDisable()
     {
-        model.OnHPCHanged -= UpdateHP;
-      
+        model.OnHPChanged -= UpdateHP;
+        model.OnStyleChanged -= UpdateStyle;
     }
 
     private void Start()
@@ -25,7 +28,7 @@ public class PlayerStatController : MonoBehaviour
         hpSlider.maxValue = model.MaxHP;
      
         UpdateHP(model.HP);
-    
+        UpdateStyle(model.StyleIndex);
 
     }
 
@@ -34,6 +37,13 @@ public class PlayerStatController : MonoBehaviour
     {
 
         hpSlider.value = hp;
+
+    }
+
+    private void UpdateStyle(int num)
+    {
+
+        styleImageUI.sprite = styleImages[num];
 
     }
 
