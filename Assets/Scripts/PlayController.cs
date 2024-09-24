@@ -13,13 +13,14 @@ public class PlayController : MonoBehaviour
     [SerializeField] private Rigidbody rigid;
 
     [SerializeField] private Transform cameraPos;
+    [SerializeField] private PlayerStat stat;
     [SerializeField] PlayerAnimationManager playerAnimationManager;
     [SerializeField] PlayerSoundManager playerSoundManager;
 
+
     [SerializeField] HitboxManager hitboxManager;
-   
-    [SerializeField] private float speed;
-    [SerializeField] private float defaultSpeed;
+ 
+
     [SerializeField] private float rotateSpeed;
 
     public int atkComboCnt;
@@ -188,7 +189,7 @@ public class PlayController : MonoBehaviour
 
     public void Move()
     {
-          cc.Move(dir * speed * Time.deltaTime);
+          cc.Move(dir * stat.SPEED * Time.deltaTime);
 
     }
     public void Rotate()
@@ -340,11 +341,11 @@ public class PlayController : MonoBehaviour
 
     public void SetSpeed(float s)
     {
-        speed = defaultSpeed * s;
+        stat.SPEED = stat.DEFAULTSPEED * s;
     }
     public void ResetSpeed()
     {
-        speed = defaultSpeed;
+        stat.SPEED = stat.DEFAULTSPEED;
     }
     public void DecreaseLoopCount()
     {

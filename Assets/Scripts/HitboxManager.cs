@@ -14,7 +14,7 @@ public class HitboxManager : MonoBehaviour
 
     Coroutine hitboxCoroutine;
 
-    WaitForSeconds hitboxOffTime = new WaitForSeconds(0.2f);
+    WaitForSeconds hitboxOffTime = new WaitForSeconds(0.15f);
 
     GameObject curBox;
 
