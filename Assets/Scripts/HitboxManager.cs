@@ -85,21 +85,27 @@ public class HitboxManager : MonoBehaviour
             component.TakeDamage(damage);
         }
 
-        Debug.Log(damage);
-
+ 
         Vector3 vec = other.ClosestPoint(transform.position);
 
         
        
         if (audioOnce == false)
         {
-            HitSoundManager.Instance.PlayerHitSound(vec, curCnt, atkType);
+            HitSoundManager.Instance.EnemyHitSound(vec, curCnt, atkType);
             audioOnce = true;
         }
         
         Instantiate(effect, vec, Quaternion.identity);
         
 
+    }
+
+    public void PlayerHit(Vector3 vec)
+    {
+        Vector3 newVec = new Vector3((player.transform.position.x + vec.x) / 2, 1.5f, (player.transform.position.z + vec.z) / 2);
+        HitSoundManager.Instance.PlayerHitSound(player.transform.position);
+        Instantiate(effect, newVec, Quaternion.identity);
     }
 
     public void AtkHitboxCoroutine(int cnt)

@@ -380,4 +380,10 @@ public class PlayController : MonoBehaviour
         this.gameObject.layer = 6;
      
     }
+
+    public void PlayerTakeDamage(int damage, Vector3 vec)
+    {
+        stat.HP-=damage;
+        hitboxManager.PlayerHit(vec);
+    }
 }

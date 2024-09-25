@@ -14,7 +14,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] NavMeshAgent agent;
     NavMeshPath navMeshPath;
 
-    [SerializeField] Transform player;
+    [SerializeField] Transform playerPos;
+    [SerializeField] PlayController player;
     [SerializeField] Animator anim;
 
    
@@ -45,7 +46,8 @@ public class Enemy : MonoBehaviour
      
 
         agent = GetComponent<NavMeshAgent>();
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        playerPos = GameObject.FindGameObjectWithTag("Player").transform;
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayController>();
         navMeshPath = new NavMeshPath();
     }
  
@@ -94,7 +96,7 @@ public class Enemy : MonoBehaviour
         isDown = true;
        
         StopAllCoroutines();
-        transform.LookAt(player.position);
+        transform.LookAt(playerPos.position);
         cooldown = StartCoroutine(AttackCoolDownCorutine());
         state = StartCoroutine(DownCorutine());
     }
@@ -109,7 +111,7 @@ public class Enemy : MonoBehaviour
         }
         AgentReset();
         StopAllCoroutines();
-        transform.LookAt(player.position);
+        transform.LookAt(playerPos.position);
         cooldown = StartCoroutine(AttackCoolDownCorutine());
         state = StartCoroutine(HitCorutine());
     }
@@ -122,10 +124,10 @@ public class Enemy : MonoBehaviour
         
         agent.isStopped = false;
 
-        while ((player.position - transform.position).sqrMagnitude > es.stats.range)
+        while ((playerPos.position - transform.position).sqrMagnitude > es.stats.range)
         {
 
-             agent.CalculatePath(player.position, navMeshPath);
+             agent.CalculatePath(playerPos.position, navMeshPath);
             
              
             
@@ -166,7 +168,7 @@ public class Enemy : MonoBehaviour
         while (atkCooldown > 0)
         {
             yield return wfs;
-            if(((player.position - transform.position).sqrMagnitude > es.stats.range))
+            if(((playerPos.position - transform.position).sqrMagnitude > es.stats.range))
             {
                
                 Trace();
@@ -174,7 +176,7 @@ public class Enemy : MonoBehaviour
             }
         }
       
-        if (((player.position - transform.position).sqrMagnitude < es.stats.range))
+        if (((playerPos.position - transform.position).sqrMagnitude < es.stats.range))
         {
 
             Attack();
@@ -188,7 +190,7 @@ public class Enemy : MonoBehaviour
 
    public IEnumerator AttackCorutine()
     {
-        transform.LookAt(player.position);
+        transform.LookAt(playerPos.position);
         anim.Play("Atk");
         yield return atkHitWFS;
         atkCooldown = es.stats.defaultAtkCooldown;
@@ -198,10 +200,11 @@ public class Enemy : MonoBehaviour
         }
         cooldown = StartCoroutine(AttackCoolDownCorutine());
 
-        if (((player.position - transform.position).sqrMagnitude < es.stats.range))
+        if (((playerPos.position - transform.position).sqrMagnitude < es.stats.range))
         {
+            player.PlayerTakeDamage(es.stats.atk, transform.position);
             
-            Debug.Log("Å©¾Æ¾Ç");
+         
         }
 
 
@@ -212,7 +215,7 @@ public class Enemy : MonoBehaviour
 
     public IEnumerator RangeAttackCorutine(GameObject bullet)
     {
-        transform.LookAt(player.position);
+        transform.LookAt(playerPos.position);
         anim.Play("Atk");
         yield return atkHitWFS;
         atkCooldown = es.stats.defaultAtkCooldown;
@@ -222,8 +225,10 @@ public class Enemy : MonoBehaviour
         }
         cooldown = StartCoroutine(AttackCoolDownCorutine());
 
-        Instantiate(bullet, transform.position, transform.rotation);
-        
+        GameObject b = Instantiate(bullet, transform.position, transform.rotation);
+        EnemyBulletScript bs = b.GetComponent<EnemyBulletScript>();
+        bs.dmg = es.stats.atk;
+        bs.player = player;
 
 
         yield return atkEndWFS;
