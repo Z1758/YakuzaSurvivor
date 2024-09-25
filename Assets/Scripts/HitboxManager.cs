@@ -42,34 +42,70 @@ public class HitboxManager : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        int damage;
+        int atk;
+        float mul;
         if (atkType || PlayerStat.Instance.StyleIndex  == 3)
         {   
-            //다운
+           
+           
+           
+             atk = PlayerStat.Instance.ATK ;
+             mul = PlayerStat.Instance.Multiplier[PlayerStat.Instance.StyleIndex].fAtkMultiplier[curCnt];
+
+            if(mul == 0)
+            {
+                mul = PlayerStat.Instance.Multiplier[PlayerStat.Instance.StyleIndex].loopAtkEndMultiplier[curCnt];
+            }
+
+            damage = (int)(atk * mul) ;
+
             if (other.TryGetComponent<Enemy>(out Enemy component))
-                component.Down();
-            component.TakeDamage(10);
+                component.TakeDamage(damage, HitAniType.Down);
          
         }
         else
         {
-            //경직
+            
+          
+           
+             atk = PlayerStat.Instance.ATK;
+             mul = PlayerStat.Instance.Multiplier[PlayerStat.Instance.StyleIndex].atkMultiplier[curCnt];
+
+            if (mul == 0)
+            {
+                mul = PlayerStat.Instance.Multiplier[PlayerStat.Instance.StyleIndex].loopAtkMultiplier[curCnt];
+            }
+
+
+            damage = (int)(atk * mul);
+
+
             if (other.TryGetComponent<Enemy>(out Enemy component))
-                component.Hit();
-            component.TakeDamage(5);
+                component.TakeDamage(damage, HitAniType.Hit);
         }
-        
+
+ 
         Vector3 vec = other.ClosestPoint(transform.position);
 
         
+       
         if (audioOnce == false)
         {
-            HitSoundManager.Instance.PlayerHitSound(vec, curCnt, atkType);
+            HitSoundManager.Instance.EnemyHitSound(vec, curCnt, atkType);
             audioOnce = true;
         }
         
         Instantiate(effect, vec, Quaternion.identity);
         
 
+    }
+
+    public void PlayerHit(Vector3 vec)
+    {
+        Vector3 newVec = new Vector3((player.transform.position.x + vec.x) / 2, 1.5f, (player.transform.position.z + vec.z) / 2);
+        HitSoundManager.Instance.PlayerHitSound(player.transform.position);
+        Instantiate(effect, newVec, Quaternion.identity);
     }
 
     public void AtkHitboxCoroutine(int cnt)

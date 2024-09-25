@@ -7,16 +7,26 @@ using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.AI;
 
+
+public enum HitAniType
+{
+    None, Hit, Down, End
+}
+
+
 public class Enemy : MonoBehaviour
 {
+  
+
     [SerializeField] EnemyStat es;
     [SerializeField] NavMeshObstacle obstacle;
     [SerializeField] NavMeshAgent agent;
     NavMeshPath navMeshPath;
 
-    [SerializeField] Transform player;
+    [SerializeField] Transform playerPos;
+    [SerializeField] PlayController player;
     [SerializeField] Animator anim;
-
+   
    
 
     [SerializeField] public Action<GameObject, int> dieEvent;
@@ -32,38 +42,54 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] bool isDown;
 
-    WaitForSeconds wfs;
+    [SerializeField] GameObject dieParticle;
 
-    WaitForSeconds atkHitWFS;
-    WaitForSeconds atkEndWFS;
-  
+
+
     private void Awake()
     {
-        wfs = new WaitForSeconds(es.stats.delay);
-        atkHitWFS = new WaitForSeconds(es.stats.atkHitTime);
-        atkEndWFS = new WaitForSeconds(es.stats.atkEndTime);
-     
 
+        dieParticle = Instantiate(es.stats.yenParticle);
+        
         agent = GetComponent<NavMeshAgent>();
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        playerPos = GameObject.FindGameObjectWithTag("Player").transform;
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayController>();
         navMeshPath = new NavMeshPath();
     }
  
+
+
     private void OnEnable()
     {
-      
-        StopAllCoroutines(); 
+       
+
+    }
+
+    public void ActiveEnemy()
+    {
+        StopAllCoroutines();
         es.SetMaxHp();
+        gameObject.layer = LayerNumber.alive;
         atkCooldown = 0;
         Trace();
+        PlayVoice(es.stats.appearVoice);
+        
+    }
+
+    void PlayVoice(AudioClip clip )
+    {
+        EnemyVoiceManager.Instance.PlayerVoice(clip, transform.position);
     }
 
     void Die()
     {
         StopAllCoroutines();
-      
+        dieParticle.transform.position = transform.position;
+        dieParticle.SetActive(true);
+        PlayVoice(es.stats.dieVoice);
+        gameObject.layer = LayerNumber.die;
         dieEvent?.Invoke(gameObject, es.stats.type);
-
+       
     }
 
 
@@ -91,17 +117,19 @@ public class Enemy : MonoBehaviour
 
 
         AgentReset();
+        PlayVoice(es.stats.downVoice);
         isDown = true;
        
         StopAllCoroutines();
-        transform.LookAt(player.position);
+        transform.LookAt(playerPos.position);
         cooldown = StartCoroutine(AttackCoolDownCorutine());
         state = StartCoroutine(DownCorutine());
     }
 
     public void Hit()
     {
-        // 데미지는 들어오도록
+      
+        PlayVoice(es.stats.hitVoice);
 
         if (isDown)
         {
@@ -109,7 +137,7 @@ public class Enemy : MonoBehaviour
         }
         AgentReset();
         StopAllCoroutines();
-        transform.LookAt(player.position);
+        transform.LookAt(playerPos.position);
         cooldown = StartCoroutine(AttackCoolDownCorutine());
         state = StartCoroutine(HitCorutine());
     }
@@ -117,15 +145,15 @@ public class Enemy : MonoBehaviour
     {
        
         obstacle.enabled = false;
-        yield return wfs;
+        yield return CachingWFS.Instance.enemyWFS;
         agent.enabled = true;
         
         agent.isStopped = false;
 
-        while ((player.position - transform.position).sqrMagnitude > es.stats.range)
+        while ((playerPos.position - transform.position).sqrMagnitude > es.stats.range)
         {
 
-             agent.CalculatePath(player.position, navMeshPath);
+             agent.CalculatePath(playerPos.position, navMeshPath);
             
              
             
@@ -136,7 +164,7 @@ public class Enemy : MonoBehaviour
             
 
             agent.SetPath(navMeshPath);
-            yield return wfs;
+            yield return CachingWFS.Instance.enemyWFS;
 
 
         }
@@ -165,8 +193,8 @@ public class Enemy : MonoBehaviour
         anim.SetInteger("AniInt", EnumConvert<int>.Cast(AniState.Idle));
         while (atkCooldown > 0)
         {
-            yield return wfs;
-            if(((player.position - transform.position).sqrMagnitude > es.stats.range))
+            yield return CachingWFS.Instance.enemyWFS;
+            if (((playerPos.position - transform.position).sqrMagnitude > es.stats.range))
             {
                
                 Trace();
@@ -174,7 +202,7 @@ public class Enemy : MonoBehaviour
             }
         }
       
-        if (((player.position - transform.position).sqrMagnitude < es.stats.range))
+        if (((playerPos.position - transform.position).sqrMagnitude < es.stats.range))
         {
 
             Attack();
@@ -188,9 +216,10 @@ public class Enemy : MonoBehaviour
 
    public IEnumerator AttackCorutine()
     {
-        transform.LookAt(player.position);
+        transform.LookAt(playerPos.position);
+        PlayVoice(es.stats.atkVoice);
         anim.Play("Atk");
-        yield return atkHitWFS;
+        yield return CachingWFS.Instance.atkHitWFS[es.stats.type];
         atkCooldown = es.stats.defaultAtkCooldown;
         if (cooldown != null)
         {
@@ -198,23 +227,24 @@ public class Enemy : MonoBehaviour
         }
         cooldown = StartCoroutine(AttackCoolDownCorutine());
 
-        if (((player.position - transform.position).sqrMagnitude < es.stats.range))
+        if (((playerPos.position - transform.position).sqrMagnitude < es.stats.range))
         {
+            player.PlayerTakeDamage(es.stats.atk, transform.position);
             
-            Debug.Log("크아악");
+         
         }
 
 
-        yield return atkEndWFS;
+        yield return CachingWFS.Instance.atkEndWFS[es.stats.type];
 
         Idle();
     }
 
     public IEnumerator RangeAttackCorutine(GameObject bullet)
     {
-        transform.LookAt(player.position);
+        transform.LookAt(playerPos.position);
         anim.Play("Atk");
-        yield return atkHitWFS;
+        yield return CachingWFS.Instance.atkHitWFS[es.stats.type];
         atkCooldown = es.stats.defaultAtkCooldown;
         if (cooldown != null)
         {
@@ -222,11 +252,13 @@ public class Enemy : MonoBehaviour
         }
         cooldown = StartCoroutine(AttackCoolDownCorutine());
 
-        Instantiate(bullet, transform.position, transform.rotation);
-        
+        GameObject b = Instantiate(bullet, transform.position, transform.rotation);
+        EnemyBulletScript bs = b.GetComponent<EnemyBulletScript>();
+        bs.dmg = es.stats.atk;
+        bs.player = player;
 
 
-        yield return atkEndWFS;
+        yield return CachingWFS.Instance.atkEndWFS[es.stats.type];
 
         Idle();
     }
@@ -253,7 +285,7 @@ public class Enemy : MonoBehaviour
        
         anim.SetTrigger("OnHit");
        
-        yield return new WaitForSeconds(0.6f);
+        yield return CachingWFS.Instance.enemyHitWFS;
 
         Idle();
     }
@@ -263,7 +295,7 @@ public class Enemy : MonoBehaviour
        
 
         anim.SetTrigger("OnDown");
-        yield return new WaitForSeconds(4.6f);
+        yield return CachingWFS.Instance.enemyDownWFS;
         isDown = false;
         Idle();
 
@@ -284,17 +316,35 @@ public class Enemy : MonoBehaviour
         StopCoroutine(state);
     }
 
-    public void TakeDamage(float damage)
+
+    public void TakeDamage(float damage, HitAniType type)
     {
         if (es.HP > 0)
         {
             es.HP -= damage;
             if (es.HP <= 0)
             {
+                Down();
                 Die();
+
+            }
+            else
+            {
+                switch (type)
+                {
+                    case HitAniType.None:
+                        break;
+                    case HitAniType.Down:
+                        Down();
+                        break;
+                    case HitAniType.Hit:
+                        Hit();
+                        break;
+
+
+                }
             }
         }
     }
-
 
 }

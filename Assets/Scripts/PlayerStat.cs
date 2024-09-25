@@ -14,6 +14,8 @@ public class PlayerStat : MonoBehaviour
     [SerializeField] private float defaultSpeed;
     [SerializeField] private float speed;
     [SerializeField] private int styleIndex;
+    [SerializeField] private AttackMultiplier[] multiplier;
+
 
     private void Awake()
     {
@@ -45,4 +47,6 @@ public class PlayerStat : MonoBehaviour
     public int ATK { get { return atk; } }
     public float DEFAULTSPEED { get { return defaultSpeed; } }
     public float SPEED { get { return speed; } set { speed = value; } }
+
+    public AttackMultiplier[] Multiplier { get { return multiplier; } }
 }

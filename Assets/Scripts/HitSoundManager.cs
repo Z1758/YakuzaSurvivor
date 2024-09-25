@@ -36,7 +36,7 @@ public class HitSoundManager : MonoBehaviour
 
     }
 
-    public void PlayerHitSound(Vector3 vec, int cnt, bool type)
+    public void EnemyHitSound(Vector3 vec, int cnt, bool type)
     {
         transform.position = vec;
       
@@ -51,5 +51,14 @@ public class HitSoundManager : MonoBehaviour
         }
 
        
+    }
+
+    public void PlayerHitSound(Vector3 vec)
+    {
+        transform.position = vec;
+        audioSource.PlayOneShot(hs[0].atkClips[0]);
+        
+
+
     }
 }
