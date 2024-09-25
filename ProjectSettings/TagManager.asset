@@ -14,7 +14,7 @@ TagManager:
   - UI
   - Player
   - PlayerPenetration
-  - 
+  - DieEnemy
   - Enemy
   - EnemyBullet
   - PlayerHixbox

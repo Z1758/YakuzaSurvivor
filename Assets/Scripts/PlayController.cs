@@ -5,6 +5,9 @@ using UnityEngine.InputSystem;
 
 public class PlayController : MonoBehaviour
 {
+
+  
+
     PlayerState ps;
 
 
@@ -371,13 +374,13 @@ public class PlayController : MonoBehaviour
 
     public void ColOff()
     {
-        this.gameObject.layer = 7;
+        this.gameObject.layer = LayerNumber.playerPeneLayer;
      
     }
 
     public void ColOn()
     {
-        this.gameObject.layer = 6;
+        this.gameObject.layer = LayerNumber.playerLayer;
      
     }
 

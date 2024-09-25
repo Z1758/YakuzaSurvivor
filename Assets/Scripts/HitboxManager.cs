@@ -47,9 +47,9 @@ public class HitboxManager : MonoBehaviour
         float mul;
         if (atkType || PlayerStat.Instance.StyleIndex  == 3)
         {   
-            //다운
-            if (other.TryGetComponent<Enemy>(out Enemy component))
-                component.Down();
+           
+           
+           
              atk = PlayerStat.Instance.ATK ;
              mul = PlayerStat.Instance.Multiplier[PlayerStat.Instance.StyleIndex].fAtkMultiplier[curCnt];
 
@@ -60,15 +60,15 @@ public class HitboxManager : MonoBehaviour
 
             damage = (int)(atk * mul) ;
 
-        
-            component.TakeDamage(damage);
+            if (other.TryGetComponent<Enemy>(out Enemy component))
+                component.TakeDamage(damage, HitAniType.Down);
          
         }
         else
         {
-            //경직
-            if (other.TryGetComponent<Enemy>(out Enemy component))
-                component.Hit();
+            
+          
+           
              atk = PlayerStat.Instance.ATK;
              mul = PlayerStat.Instance.Multiplier[PlayerStat.Instance.StyleIndex].atkMultiplier[curCnt];
 
@@ -80,9 +80,9 @@ public class HitboxManager : MonoBehaviour
 
             damage = (int)(atk * mul);
 
-            
 
-            component.TakeDamage(damage);
+            if (other.TryGetComponent<Enemy>(out Enemy component))
+                component.TakeDamage(damage, HitAniType.Hit);
         }
 
  

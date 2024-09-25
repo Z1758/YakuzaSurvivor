@@ -26,3 +26,5 @@ MonoBehaviour:
   dieVoice: {fileID: 8300000, guid: ea868b6124a000148881b5057af12bad, type: 3}
   downVoice: {fileID: 8300000, guid: 7ed7f8b0b4eaaa64fb9a49e80d5b83ca, type: 3}
   hitVoice: {fileID: 8300000, guid: e9590143735ce0147a176415ef3cb466, type: 3}
+  yenParticle: {fileID: 1600481298327083374, guid: ab00b01862e10ad4a82dd3e09be2bef6,
+    type: 3}
