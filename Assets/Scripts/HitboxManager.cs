@@ -42,12 +42,26 @@ public class HitboxManager : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        int damage;
+        int atk;
+        float mul;
         if (atkType || PlayerStat.Instance.StyleIndex  == 3)
         {   
             //다운
             if (other.TryGetComponent<Enemy>(out Enemy component))
                 component.Down();
-            component.TakeDamage(10);
+             atk = PlayerStat.Instance.ATK ;
+             mul = PlayerStat.Instance.Multiplier[PlayerStat.Instance.StyleIndex].fAtkMultiplier[curCnt];
+
+            if(mul == 0)
+            {
+                mul = PlayerStat.Instance.Multiplier[PlayerStat.Instance.StyleIndex].loopAtkEndMultiplier[curCnt];
+            }
+
+            damage = (int)(atk * mul) ;
+
+        
+            component.TakeDamage(damage);
          
         }
         else
@@ -55,12 +69,28 @@ public class HitboxManager : MonoBehaviour
             //경직
             if (other.TryGetComponent<Enemy>(out Enemy component))
                 component.Hit();
-            component.TakeDamage(5);
+             atk = PlayerStat.Instance.ATK;
+             mul = PlayerStat.Instance.Multiplier[PlayerStat.Instance.StyleIndex].atkMultiplier[curCnt];
+
+            if (mul == 0)
+            {
+                mul = PlayerStat.Instance.Multiplier[PlayerStat.Instance.StyleIndex].loopAtkMultiplier[curCnt];
+            }
+
+
+            damage = (int)(atk * mul);
+
+            
+
+            component.TakeDamage(damage);
         }
-        
+
+        Debug.Log(damage);
+
         Vector3 vec = other.ClosestPoint(transform.position);
 
         
+       
         if (audioOnce == false)
         {
             HitSoundManager.Instance.PlayerHitSound(vec, curCnt, atkType);
