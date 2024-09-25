@@ -1,22 +1,25 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.SocialPlatforms;
 
-public class DisMob : MonoBehaviour
+public class Enemy : MonoBehaviour
 {
+    [SerializeField] EnemyStat es;
+    [SerializeField] NavMeshObstacle obstacle;
     [SerializeField] NavMeshAgent agent;
+    NavMeshPath navMeshPath;
+
     [SerializeField] Transform player;
     [SerializeField] Animator anim;
 
-    [SerializeField] int hp;
-    [SerializeField] int maxhp;
-    [SerializeField] float range;
+   
 
-    [SerializeField] public Action<GameObject> dEvent;
+    [SerializeField] public Action<GameObject, int> dieEvent;
 
 
     Coroutine damage;
@@ -24,10 +27,7 @@ public class DisMob : MonoBehaviour
     Coroutine cooldown;
 
 
-    [SerializeField] float delay;
-    [SerializeField] float atkHitTime;
-    [SerializeField] float atkEndTime;
-    [SerializeField] float defaultAtkCooldown;
+
     [SerializeField] float atkCooldown;
 
     [SerializeField] bool isDown;
@@ -39,37 +39,21 @@ public class DisMob : MonoBehaviour
   
     private void Awake()
     {
-        wfs = new WaitForSeconds(delay);
-        atkHitWFS = new WaitForSeconds(atkHitTime);
-        atkEndWFS = new WaitForSeconds(atkEndTime);
+        wfs = new WaitForSeconds(es.stats.delay);
+        atkHitWFS = new WaitForSeconds(es.stats.atkHitTime);
+        atkEndWFS = new WaitForSeconds(es.stats.atkEndTime);
      
 
         agent = GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
+        navMeshPath = new NavMeshPath();
     }
  
-
-    private void Update()
-    {
-        /*
-     
-        if (Input.GetKeyDown(KeyCode.Z) && isDown == false)
-        {
-
-            Hit();
-        }
-
-        if (Input.GetKeyDown(KeyCode.X) )
-        {
-
-            Down();
-        }*/
-    }
-
     private void OnEnable()
     {
+      
         StopAllCoroutines(); 
-        hp = maxhp;
+        es.SetMaxHp();
         atkCooldown = 0;
         Trace();
     }
@@ -78,7 +62,7 @@ public class DisMob : MonoBehaviour
     {
         StopAllCoroutines();
       
-        dEvent?.Invoke(gameObject);
+        dieEvent?.Invoke(gameObject, es.stats.type);
 
     }
 
@@ -105,10 +89,10 @@ public class DisMob : MonoBehaviour
     public void Down()
     {
 
-        
-        agent.isStopped = true;
+
+        AgentReset();
         isDown = true;
-        agent.ResetPath();
+       
         StopAllCoroutines();
         transform.LookAt(player.position);
         cooldown = StartCoroutine(AttackCoolDownCorutine());
@@ -123,8 +107,7 @@ public class DisMob : MonoBehaviour
         {
             return;
         }
-        agent.isStopped = true;
-        agent.ResetPath();
+        AgentReset();
         StopAllCoroutines();
         transform.LookAt(player.position);
         cooldown = StartCoroutine(AttackCoolDownCorutine());
@@ -132,34 +115,58 @@ public class DisMob : MonoBehaviour
     }
     IEnumerator TraceCorutine()
     {
-     
-      
+       
+        obstacle.enabled = false;
+        yield return wfs;
+        agent.enabled = true;
+        
         agent.isStopped = false;
 
-        while ((player.position - transform.position).sqrMagnitude > range)
+        while ((player.position - transform.position).sqrMagnitude > es.stats.range)
         {
 
+             agent.CalculatePath(player.position, navMeshPath);
+            
+             
+            
+
             anim.SetInteger("AniInt", EnumConvert<int>.Cast(AniState.Run));
-            agent.SetDestination(player.position);
+           // agent.SetDestination(player.position);
+          
+            
+
+            agent.SetPath(navMeshPath);
             yield return wfs;
 
 
         }
-        agent.isStopped = true;
-        agent.ResetPath();
+
+
+      
         Idle();
 
     }
+
+    void AgentReset()
+    {
+        if (agent.enabled == false)
+            return;
+        agent.isStopped = true;
+        agent.ResetPath();
+    }
+    
     IEnumerator IdleCorutine()
     {
-      
-       
-       
+
+        AgentReset();
+        agent.enabled = false;
+        obstacle.enabled = true;
+
         anim.SetInteger("AniInt", EnumConvert<int>.Cast(AniState.Idle));
         while (atkCooldown > 0)
         {
             yield return wfs;
-            if(((player.position - transform.position).sqrMagnitude > range))
+            if(((player.position - transform.position).sqrMagnitude > es.stats.range))
             {
                
                 Trace();
@@ -167,7 +174,7 @@ public class DisMob : MonoBehaviour
             }
         }
       
-        if (((player.position - transform.position).sqrMagnitude < range))
+        if (((player.position - transform.position).sqrMagnitude < es.stats.range))
         {
 
             Attack();
@@ -179,23 +186,44 @@ public class DisMob : MonoBehaviour
       
     }
 
-    IEnumerator AttackCorutine()
+   public IEnumerator AttackCorutine()
     {
         transform.LookAt(player.position);
         anim.Play("Atk");
         yield return atkHitWFS;
-        atkCooldown = defaultAtkCooldown;
+        atkCooldown = es.stats.defaultAtkCooldown;
         if (cooldown != null)
         {
             StopCoroutine(cooldown);
         }
         cooldown = StartCoroutine(AttackCoolDownCorutine());
 
-        if (((player.position - transform.position).sqrMagnitude < range))
+        if (((player.position - transform.position).sqrMagnitude < es.stats.range))
         {
             
             Debug.Log("Å©¾Æ¾Ç");
         }
+
+
+        yield return atkEndWFS;
+
+        Idle();
+    }
+
+    public IEnumerator RangeAttackCorutine(GameObject bullet)
+    {
+        transform.LookAt(player.position);
+        anim.Play("Atk");
+        yield return atkHitWFS;
+        atkCooldown = es.stats.defaultAtkCooldown;
+        if (cooldown != null)
+        {
+            StopCoroutine(cooldown);
+        }
+        cooldown = StartCoroutine(AttackCoolDownCorutine());
+
+        Instantiate(bullet, transform.position, transform.rotation);
+        
 
 
         yield return atkEndWFS;
@@ -241,18 +269,8 @@ public class DisMob : MonoBehaviour
 
     }
 
-    IEnumerator  TakeTamage()
-    {
-        while (hp>0)
-        {
-            yield return new WaitForSeconds(0.2f);
-            hp--;
-            if (hp <= 0)
-            {
-                Die();
-            }
-        }
-    }
+  
+
 
     protected void StopCoroutineNullCheck()
     {
@@ -265,4 +283,18 @@ public class DisMob : MonoBehaviour
         }
         StopCoroutine(state);
     }
+
+    public void TakeDamage(float damage)
+    {
+        if (es.HP > 0)
+        {
+            es.HP -= damage;
+            if (es.HP <= 0)
+            {
+                Die();
+            }
+        }
+    }
+
+
 }

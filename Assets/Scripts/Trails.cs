@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DaggerTrail : MonoBehaviour
+public class Trails : MonoBehaviour
 {
 
     [SerializeField] GameObject trailPrefab;
     [SerializeField] SkinnedMeshRenderer smr;
     List<BakeTrail> bts;
-
+    List<GameObject> trails;
     [SerializeField] float delay;
     [SerializeField] int trailCnt;
     WaitForSeconds delayWFS;
@@ -24,25 +24,30 @@ public class DaggerTrail : MonoBehaviour
 
     private void Awake()
     {
+        trails = new List<GameObject>();
         bts = new List<BakeTrail>();
         for (int i = 0; i < trailCnt; i++)
         {
-            bts.Add(Instantiate(trailPrefab).GetComponent<BakeTrail>());
+            GameObject trail = Instantiate(trailPrefab);
+            trails.Add(trail);
+            bts.Add(trail.GetComponent<BakeTrail>());
             bts[i].SetSMR(smr);
             bts[i].SetMinus(trailCnt);
+            trail.SetActive(false);
+
         }
     }
 
     void Start()
     {
-        
+
 
         delayWFS = new WaitForSeconds(delay);
 
         prevRotation = Quaternion.identity;
         prevVector = transform.localPosition;
 
-        BCorouine = StartCoroutine("BakeCoroutine");
+
     }
 
 
@@ -51,10 +56,10 @@ public class DaggerTrail : MonoBehaviour
 
         while (true)
         {
-           
+
 
             bts[index].Bake();
-           
+
             bts[index].SetFade();
             for (int i = 0; i < bts.Count; i++)
             {
@@ -69,7 +74,7 @@ public class DaggerTrail : MonoBehaviour
 
             index++;
 
-            if(index >= bts.Count)
+            if (index >= bts.Count)
             {
                 index = 0;
             }
@@ -77,5 +82,48 @@ public class DaggerTrail : MonoBehaviour
             yield return delayWFS;
         }
 
+    }
+    public void OnTrails(Color color)
+    {
+        if (BCorouine != null)
+        {
+            StopCoroutine(BCorouine);
+        }
+
+        BCorouine = StartCoroutine("BakeCoroutine");
+        for (int i = 0; i < trails.Count; i++)
+        {
+            bts[i].SetColor(color);
+            bts[i].gameObject.transform.position = transform.position;
+            bts[i].gameObject.transform.rotation = transform.rotation;
+            trails[i].SetActive(true);
+        }
+    }
+
+    public void OnTrail()
+    {
+        if (BCorouine != null)
+        {
+            StopCoroutine(BCorouine);
+        }
+
+        BCorouine = StartCoroutine("BakeCoroutine");
+
+        for (int i = 0; i < trails.Count; i++)
+        {
+
+            trails[i].SetActive(true);
+        }
+    }
+    public void OffTrail()
+    {
+        if (BCorouine != null)
+        {
+            StopCoroutine(BCorouine);
+        }
+        for (int i = 0; i < trails.Count; i++)
+        {
+            trails[i].SetActive(false);
+        }
     }
 }

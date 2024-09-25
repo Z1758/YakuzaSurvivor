@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe240bd94c9d31840b8d0455b7145f05, type: 3}
+  m_Name: Thug
+  m_EditorClassIdentifier: 
+  atkClips:
+  - {fileID: 8300000, guid: 7865baf6cff93ad42a731722e8477140, type: 3}
+  - {fileID: 8300000, guid: 22af9eada589e3044a5f4f0e9f961cc9, type: 3}
+  - {fileID: 8300000, guid: 4298a08180a4262409c1e3c6a4d40495, type: 3}
+  - {fileID: 8300000, guid: fec2e57b0c899944a82c0daa0926286d, type: 3}
+  fAtkClips:
+  - {fileID: 8300000, guid: 93e8aecb135a3374ea6e0ceaa6a27732, type: 3}
+  - {fileID: 8300000, guid: 3c1f609b685c00b478bd18073c135648, type: 3}
+  - {fileID: 8300000, guid: b7a12a04ff2b1ed4aa14ee8ddf50ccca, type: 3}
+  - {fileID: 8300000, guid: a9a3728bfd57d754898d4d6dc9732094, type: 3}

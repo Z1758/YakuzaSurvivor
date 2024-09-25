@@ -26,54 +26,37 @@ public class PlayerAnimationManager : MonoBehaviour
     Coroutine atkAniEnd;
     Coroutine loopCountCoroutine;
 
+    [SerializeField] GameObject darkUI;
+
     private void Awake()
     {
         SetAnim(0);
-
-
     }
 
     public void SetAnim(int index)
     {
+
+        if (curStyle.weapon != null)
+        {
+            CharacterTrail.Instance.OffDaggerTrail();
+            curStyle.weapon.SetActive(false);
+        }
+
         curStyle = styles[index];
         anim.runtimeAnimatorController = curStyle.anim;
 
-    }
-    public void SetWFS()
-    {
-        /*
-          atkEndTime = new WaitForSeconds[curStyle.atkClips.Length];
-          atkInputTime = new WaitForSeconds[curStyle.atkClips.Length];
-          fEndTime = new WaitForSeconds[curStyle.fClips.Length];
-          lEndTime = new WaitForSeconds[curStyle.fClips.Length];
-          lAtkInputTime = new WaitForSeconds[curStyle.fClips.Length];
-          lAtkEndTime = new WaitForSeconds[curStyle.fClips.Length];
+        if (curStyle.weapon != null)
+        {
+            curStyle.weapon.SetActive(true);
+            if(index == 3)
+            {
+                CharacterTrail.Instance.OnDaggerTrail();
+            }
 
-
-          for (int i = 0; i < curStyle.atkClips.Length; i++)
-          {
-
-              atkEndTime[i] = new WaitForSeconds(curStyle.atkClips[i].length * curStyle.atkEndTimeRatio[i]);
-
-
-              atkInputTime[i] = new WaitForSeconds(curStyle.atkClipsEnd[i]);
-
-
-              fEndTime[i] = new WaitForSeconds(curStyle.fClips[i].length * 0.95f);
-
-              lEndTime[i] = new WaitForSeconds(curStyle.loopAtkTime[i]);
-
-              lAtkInputTime[i] = new WaitForSeconds(curStyle.loopAtkInputTime[i]);
-
-              lAtkEndTime[i] = new WaitForSeconds(curStyle.loopAtkEndTime[i]);
-          }
-
-          changeTime = new WaitForSeconds(curStyle.changeTime);
-          */
-
+        }
     }
 
-
+ 
     public bool GetAniName(string name)
     {
 
@@ -97,7 +80,7 @@ public class PlayerAnimationManager : MonoBehaviour
 
         if (type)
         {
-            if (ChangeState.Instance.index == 3)
+            if (PlayerStat.Instance.StyleIndex == 3)
             {
                 player.ColOff();
             }
@@ -123,7 +106,7 @@ public class PlayerAnimationManager : MonoBehaviour
         yield return time;
 
         player.AtkStateChange();
-        if (ChangeState.Instance.index == 3)
+        if (PlayerStat.Instance.StyleIndex == 3)
         {
             player.ColOn();
         }
@@ -145,7 +128,20 @@ public class PlayerAnimationManager : MonoBehaviour
 
 
     }
- 
+    public IEnumerator ChangeAniEnd(WaitForSecondsRealtime time)
+    {
+
+        Time.timeScale = 0.2f;
+        darkUI.SetActive(true);
+        yield return time;
+       
+        Time.timeScale = 1.0f;
+        darkUI.SetActive(false);
+        player.FAtkEnd();
+
+
+
+    }
 
     public void LoopAtkAniCoroutine(int cnt)
     {
@@ -206,7 +202,7 @@ public class PlayerAnimationManager : MonoBehaviour
 
 
         anim.Play(curStyle.styleChangeAni.name);
-        atkAniEnd = StartCoroutine(FAtkAniEnd(curStyle.changeTimeWFS));
+        atkAniEnd = StartCoroutine(ChangeAniEnd(curStyle.changeTimeWFS));
 
     }
 

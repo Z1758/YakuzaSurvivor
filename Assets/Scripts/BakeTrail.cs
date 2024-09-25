@@ -15,8 +15,7 @@ public class BakeTrail : MonoBehaviour
     [SerializeField] public float fade;
     [SerializeField] public float curFade;
     [SerializeField] public float minusFade;
-    [ColorUsage(true, true)]
-    [SerializeField] public Color color;
+
     [SerializeField] public float inten;
 
     private void Awake()
@@ -32,19 +31,16 @@ public class BakeTrail : MonoBehaviour
       
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            for (int i = 0; i < meshRenderer.materials.Length; i++)
-            {
-          
-                meshRenderer.materials[i].SetColor("_Fren", color );
-            }
-           
-        }
-    }
 
+    public void SetColor(Color color)
+    {
+        for (int i = 0; i < meshRenderer.materials.Length; i++)
+        {
+
+            meshRenderer.materials[i].SetColor("_Fren", color);
+        }
+
+    }
 
     public void SetSMR(SkinnedMeshRenderer smr)
     {

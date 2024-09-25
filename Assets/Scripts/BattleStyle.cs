@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class BattleStyle : MonoBehaviour
 {
-  
+
+    [SerializeField] public GameObject weapon;
     [SerializeField] public AnimationClip styleChangeAni;
     [SerializeField] public RuntimeAnimatorController anim;
 
@@ -35,7 +36,7 @@ public class BattleStyle : MonoBehaviour
 
 
 
-    public WaitForSeconds changeTimeWFS;
+    public WaitForSecondsRealtime changeTimeWFS;
 
 
     private void Awake()
@@ -79,7 +80,7 @@ public class BattleStyle : MonoBehaviour
 
             lAtkEndTime[i] = new WaitForSeconds(loopAtkEndTime[i]);
         }
-        changeTimeWFS = new WaitForSeconds(changeTime);
+        changeTimeWFS = new WaitForSecondsRealtime(changeTime);
     }
 
 

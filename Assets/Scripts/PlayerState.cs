@@ -346,7 +346,7 @@ public class ChangeState : State
 
     private static ChangeState instance;
 
-    public int index;
+ 
 
     public ChangeState(PlayController controller) : base(controller)
     {

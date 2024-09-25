@@ -10,13 +10,17 @@ public class PlayController : MonoBehaviour
 
     [SerializeField] public Animator anim;
     [SerializeField] private CharacterController cc;
-   
-    [SerializeField] private Transform cameraPos;
-    [SerializeField] PlayerAnimationManager playerAnimationManager;
-    [SerializeField] HitboxManager hitboxManager;
+    [SerializeField] private Rigidbody rigid;
 
-    [SerializeField] private float speed;
-    [SerializeField] private float defaultSpeed;
+    [SerializeField] private Transform cameraPos;
+    [SerializeField] private PlayerStat stat;
+    [SerializeField] PlayerAnimationManager playerAnimationManager;
+    [SerializeField] PlayerSoundManager playerSoundManager;
+
+
+    [SerializeField] HitboxManager hitboxManager;
+ 
+
     [SerializeField] private float rotateSpeed;
 
     public int atkComboCnt;
@@ -91,11 +95,13 @@ public class PlayController : MonoBehaviour
                 ps.SetState(AttackState.Instance);
             }
 
-            if (ChangeState.Instance.index != index - 1 && index != 0)
+            if (stat.StyleIndex != index - 1 && index != 0)
             {
 
-                ChangeState.Instance.index = index - 1;
+                stat.StyleIndex = index - 1;
                 ps.SetState(ChangeState.Instance);
+              
+            
             }
 
 
@@ -144,7 +150,7 @@ public class PlayController : MonoBehaviour
 
         if (Mouse.current.rightButton.wasPressedThisFrame)
         {
-            if (ChangeState.Instance.index == 3)
+            if (stat.StyleIndex == 3)
             {
                 return null;
             }
@@ -183,9 +189,7 @@ public class PlayController : MonoBehaviour
 
     public void Move()
     {
-
-       
-        cc.Move(dir * speed * Time.deltaTime);
+          cc.Move(dir * stat.SPEED * Time.deltaTime);
 
     }
     public void Rotate()
@@ -204,25 +208,27 @@ public class PlayController : MonoBehaviour
 
         isAtk = true;
 
-        if (dir.sqrMagnitude >= 1)
-        {
-            Quaternion lookRot = Quaternion.LookRotation(dir);
-            transform.rotation = lookRot;
-        }
+        LookDir();
 
         playerAnimationManager.AtkAniCoroutine(atkComboCnt, true);
+
         hitboxManager.AtkHitboxCoroutine(atkComboCnt);
 
         atkComboCnt++;
 
 
     }
+
+  
+
     public void FAtk()
     {
 
         isAtk = true;
 
+        LookDir();
         playerAnimationManager.AtkAniCoroutine(atkComboCnt-1, false);
+
         playerAnimationManager.PlayFAtk(atkComboCnt - 1 );
         hitboxManager.FAtkHitboxCoroutine(atkComboCnt -1);
         atkComboCnt = 0;
@@ -230,10 +236,10 @@ public class PlayController : MonoBehaviour
 
 
     }
-
+ 
     public void LoopAtkEnter()
     {
-
+        LookDir();
         playerAnimationManager.LoopAtkAniCoroutine(atkComboCnt - 1);
         playerAnimationManager.PlayFAtk(atkComboCnt - 1);
         hitboxManager.StartLoopHitboxCoroutine(atkComboCnt -1);
@@ -301,6 +307,14 @@ public class PlayController : MonoBehaviour
     }
 
 
+    public void LookDir()
+    {
+        if (dir.sqrMagnitude >= 0.1)
+        {
+            Quaternion lookRot = Quaternion.LookRotation(dir);
+            transform.rotation = lookRot;
+        }
+    }
 
     public void ComboReset()
     {
@@ -332,11 +346,11 @@ public class PlayController : MonoBehaviour
 
     public void SetSpeed(float s)
     {
-        speed = defaultSpeed * s;
+        stat.SPEED = stat.DEFAULTSPEED * s;
     }
     public void ResetSpeed()
     {
-        speed = defaultSpeed;
+        stat.SPEED = stat.DEFAULTSPEED;
     }
     public void DecreaseLoopCount()
     {
@@ -345,9 +359,11 @@ public class PlayController : MonoBehaviour
 
     public void ChangeStyle()
     {
-        hitboxManager.SetBox(ChangeState.Instance.index);
-        playerAnimationManager.SetAnim(ChangeState.Instance.index);
-        playerAnimationManager.ChangeAniCoroutine(ChangeState.Instance.index);
+        hitboxManager.SetBox(stat.StyleIndex);
+        playerAnimationManager.SetAnim(stat.StyleIndex);
+        playerAnimationManager.ChangeAniCoroutine(stat.StyleIndex);
+        playerSoundManager.SetSound(stat.StyleIndex);
+
         ComboReset();
         isAtk = true;
 
