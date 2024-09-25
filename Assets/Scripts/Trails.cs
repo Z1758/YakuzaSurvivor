@@ -24,7 +24,7 @@ public class Trails : MonoBehaviour
 
     private void Awake()
     {
-        trails = new List<GameObject> ();
+        trails = new List<GameObject>();
         bts = new List<BakeTrail>();
         for (int i = 0; i < trailCnt; i++)
         {
@@ -40,14 +40,14 @@ public class Trails : MonoBehaviour
 
     void Start()
     {
-        
+
 
         delayWFS = new WaitForSeconds(delay);
 
         prevRotation = Quaternion.identity;
         prevVector = transform.localPosition;
 
-        BCorouine = StartCoroutine("BakeCoroutine");
+
     }
 
 
@@ -56,10 +56,10 @@ public class Trails : MonoBehaviour
 
         while (true)
         {
-           
+
 
             bts[index].Bake();
-           
+
             bts[index].SetFade();
             for (int i = 0; i < bts.Count; i++)
             {
@@ -74,7 +74,7 @@ public class Trails : MonoBehaviour
 
             index++;
 
-            if(index >= bts.Count)
+            if (index >= bts.Count)
             {
                 index = 0;
             }
@@ -85,6 +85,12 @@ public class Trails : MonoBehaviour
     }
     public void OnTrails(Color color)
     {
+        if (BCorouine != null)
+        {
+            StopCoroutine(BCorouine);
+        }
+
+        BCorouine = StartCoroutine("BakeCoroutine");
         for (int i = 0; i < trails.Count; i++)
         {
             bts[i].SetColor(color);
@@ -96,14 +102,25 @@ public class Trails : MonoBehaviour
 
     public void OnTrail()
     {
+        if (BCorouine != null)
+        {
+            StopCoroutine(BCorouine);
+        }
+
+        BCorouine = StartCoroutine("BakeCoroutine");
+
         for (int i = 0; i < trails.Count; i++)
         {
-         
+
             trails[i].SetActive(true);
         }
     }
     public void OffTrail()
     {
+        if (BCorouine != null)
+        {
+            StopCoroutine(BCorouine);
+        }
         for (int i = 0; i < trails.Count; i++)
         {
             trails[i].SetActive(false);

@@ -10,7 +10,7 @@ public class RangeEnemy : Enemy
     {
         StopCoroutineNullCheck();
         state = StartCoroutine(RangeAttackCorutine(bullet));
-        Debug.Log("R Atk");
+       
     }
 
     
