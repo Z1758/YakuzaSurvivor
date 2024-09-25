@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MeleeEnemy : DisMob
+public class MeleeEnemy : Enemy
 {
     protected override void Attack()
     {

@@ -4,13 +4,16 @@ using UnityEngine;
 
 public class MobPool : MonoBehaviour
 {
+    [SerializeField] CSV_Parser csv;
     [SerializeField] Transform[] spawnPoints;
     public static MobPool Instance { get; private set; }
-    [SerializeField] GameObject prefab;
-    [SerializeField] int poolSize;
-    Queue<GameObject> queue;
+    [SerializeField] GameObject[] prefabs;
+    [SerializeField] int[] poolSize;
+    Queue<GameObject>[] queue;
 
     public List<GameObject> activeMob;
+
+    Coroutine spawnCoroutine;
 
     private void Awake()
     {
@@ -23,22 +26,37 @@ public class MobPool : MonoBehaviour
             Destroy(gameObject);
         }
 
+        csv = GetComponent<CSV_Parser>();
 
         activeMob = new List<GameObject>();
-        queue = new Queue<GameObject>();
 
-        for (int i = 0; i < poolSize; i++)
+      
+        queue = new Queue<GameObject>[prefabs.Length];
+        for(int i = 0; i < queue.Length; i++)
         {
-            GameObject m = Instantiate(prefab);
-            m.SetActive(false);
-
-            if (m.TryGetComponent<DisMob>(out DisMob me))
-            {
-                me.dEvent += ReturnPool;
-            }
-
-            queue.Enqueue(m);
+            queue[i] = new Queue<GameObject>();
         }
+        
+
+       for (int i = 0; i < prefabs.Length; i++)
+        {
+          
+            for (int y = 0; y < poolSize[i]; y++)
+            {
+                GameObject m = Instantiate(prefabs[i]);
+                m.SetActive(false);
+
+                if (m.TryGetComponent<Enemy>(out Enemy me))
+                {
+                    me.dieEvent += ReturnPool;
+                }
+
+                queue[i].Enqueue(m);
+            }
+        }
+       
+
+    
 
     }
 
@@ -51,42 +69,72 @@ public class MobPool : MonoBehaviour
 
     public void StartSpawn()
     {
-        StartCoroutine(SpawnMobCorouinte());
+        if (spawnCoroutine != null) { 
+            StopCoroutine(spawnCoroutine);
+        }
+   
+
+        spawnCoroutine = StartCoroutine(SpawnMobCorouinte());
     }
 
     IEnumerator SpawnMobCorouinte()
     {
-        while (true)
+        StageData stageData = csv.stageDatas.Dequeue();
+
+        WaitForSeconds delay = new WaitForSeconds(stageData.delay);
+        int count = stageData.count;
+
+
+        while (count > 0 )
         {
-            yield return new WaitForSeconds(0.1f);
-            Spawn();
+           
+
+
+            yield return delay;
+            Spawn(stageData.type);
+            count--;
         }
+
+        if(csv.stageDatas.Count > 0)
+        StartSpawn();
     }
 
-    void Spawn()
+    void Spawn(int type)
     {
-        if (queue.Count != 0)
-        {
-            int ran = Random.Range(0, spawnPoints.Length);
 
-            GameObject m = queue.Dequeue();
+        int ran = Random.Range(0, spawnPoints.Length);
+        if (queue[type].Count != 0)
+        {
+            
+
+            GameObject m = queue[type].Dequeue();
             m.transform.position = spawnPoints[ran].position;
             m.SetActive(true);
             activeMob.Add(m);
 
         }
+        else
+        {
+            GameObject m = Instantiate(prefabs[type]);
+            if (m.TryGetComponent<Enemy>(out Enemy me))
+            {
+                me.dieEvent += ReturnPool;
+            }
+            m.transform.position = spawnPoints[ran].position;
+    
+            activeMob.Add(m);
+        }
     }
 
-    void ReturnPool(GameObject mob)
+    void ReturnPool(GameObject mob, int type)
     {
        
         mob.SetActive(false);
-        queue.Enqueue(mob);
+        
+
+        queue[type].Enqueue(mob);
         activeMob.Remove(mob);
     }
 
-    void Update()
-    {
-
-    }
+ 
 }

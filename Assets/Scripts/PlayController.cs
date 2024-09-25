@@ -208,11 +208,7 @@ public class PlayController : MonoBehaviour
 
         isAtk = true;
 
-        if (dir.sqrMagnitude >= 0.1)
-        {
-            Quaternion lookRot = Quaternion.LookRotation(dir);
-            transform.rotation = lookRot;
-        }
+        LookDir();
 
         playerAnimationManager.AtkAniCoroutine(atkComboCnt, true);
 
@@ -230,6 +226,7 @@ public class PlayController : MonoBehaviour
 
         isAtk = true;
 
+        LookDir();
         playerAnimationManager.AtkAniCoroutine(atkComboCnt-1, false);
 
         playerAnimationManager.PlayFAtk(atkComboCnt - 1 );
@@ -242,7 +239,7 @@ public class PlayController : MonoBehaviour
  
     public void LoopAtkEnter()
     {
-
+        LookDir();
         playerAnimationManager.LoopAtkAniCoroutine(atkComboCnt - 1);
         playerAnimationManager.PlayFAtk(atkComboCnt - 1);
         hitboxManager.StartLoopHitboxCoroutine(atkComboCnt -1);
@@ -310,6 +307,14 @@ public class PlayController : MonoBehaviour
     }
 
 
+    public void LookDir()
+    {
+        if (dir.sqrMagnitude >= 0.1)
+        {
+            Quaternion lookRot = Quaternion.LookRotation(dir);
+            transform.rotation = lookRot;
+        }
+    }
 
     public void ComboReset()
     {

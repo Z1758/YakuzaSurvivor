@@ -45,7 +45,7 @@ public class HitboxManager : MonoBehaviour
         if (atkType || PlayerStat.Instance.StyleIndex  == 3)
         {   
             //다운
-            if (other.TryGetComponent<DisMob>(out DisMob component))
+            if (other.TryGetComponent<Enemy>(out Enemy component))
                 component.Down();
             component.TakeDamage(10);
          
@@ -53,7 +53,7 @@ public class HitboxManager : MonoBehaviour
         else
         {
             //경직
-            if (other.TryGetComponent<DisMob>(out DisMob component))
+            if (other.TryGetComponent<Enemy>(out Enemy component))
                 component.Hit();
             component.TakeDamage(5);
         }
