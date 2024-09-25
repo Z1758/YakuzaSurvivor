@@ -101,7 +101,7 @@ public class PlayController : MonoBehaviour
                 stat.StyleIndex = index - 1;
                 ps.SetState(ChangeState.Instance);
               
-                BGM_Manager.Instance.ChangeBGM(stat.StyleIndex);
+            
             }
 
 

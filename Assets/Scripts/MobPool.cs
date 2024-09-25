@@ -45,7 +45,7 @@ public class MobPool : MonoBehaviour
 
     void Start()
     {
-      
+        StartSpawn();
 
     }
 

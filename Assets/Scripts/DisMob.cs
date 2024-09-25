@@ -3,12 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.SocialPlatforms;
 
 public class DisMob : MonoBehaviour
 {
+    [SerializeField] EnemyStat es;
     [SerializeField] NavMeshObstacle obstacle;
     [SerializeField] NavMeshAgent agent;
     NavMeshPath navMeshPath;
@@ -16,9 +17,7 @@ public class DisMob : MonoBehaviour
     [SerializeField] Transform player;
     [SerializeField] Animator anim;
 
-    [SerializeField] int hp;
-    [SerializeField] int maxhp;
-    [SerializeField] float range;
+   
 
     [SerializeField] public Action<GameObject> dEvent;
 
@@ -57,7 +56,7 @@ public class DisMob : MonoBehaviour
     {
       
         StopAllCoroutines(); 
-        hp = maxhp;
+        es.SetMaxHp();
         atkCooldown = 0;
         Trace();
     }
@@ -126,7 +125,7 @@ public class DisMob : MonoBehaviour
         
         agent.isStopped = false;
 
-        while ((player.position - transform.position).sqrMagnitude > range)
+        while ((player.position - transform.position).sqrMagnitude > es.stats.range)
         {
 
              agent.CalculatePath(player.position, navMeshPath);
@@ -170,7 +169,7 @@ public class DisMob : MonoBehaviour
         while (atkCooldown > 0)
         {
             yield return wfs;
-            if(((player.position - transform.position).sqrMagnitude > range))
+            if(((player.position - transform.position).sqrMagnitude > es.stats.range))
             {
                
                 Trace();
@@ -178,7 +177,7 @@ public class DisMob : MonoBehaviour
             }
         }
       
-        if (((player.position - transform.position).sqrMagnitude < range))
+        if (((player.position - transform.position).sqrMagnitude < es.stats.range))
         {
 
             Attack();
@@ -202,7 +201,7 @@ public class DisMob : MonoBehaviour
         }
         cooldown = StartCoroutine(AttackCoolDownCorutine());
 
-        if (((player.position - transform.position).sqrMagnitude < range))
+        if (((player.position - transform.position).sqrMagnitude < es.stats.range))
         {
             
             Debug.Log("Å©¾Æ¾Ç");
@@ -252,18 +251,8 @@ public class DisMob : MonoBehaviour
 
     }
 
-    IEnumerator  TakeTamage()
-    {
-        while (hp>0)
-        {
-            yield return new WaitForSeconds(0.2f);
-            hp--;
-            if (hp <= 0)
-            {
-                Die();
-            }
-        }
-    }
+  
+
 
     protected void StopCoroutineNullCheck()
     {
@@ -276,4 +265,18 @@ public class DisMob : MonoBehaviour
         }
         StopCoroutine(state);
     }
+
+    public void TakeDamage(float damage)
+    {
+        if (es.HP > 0)
+        {
+            es.HP -= damage;
+            if (es.HP <= 0)
+            {
+                Die();
+            }
+        }
+    }
+
+
 }

@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.InputSystem.XR.TrackedPoseDriver;
 
 public class BGM_Manager : MonoBehaviour
 {
     private static BGM_Manager instance;
+
+    [SerializeField] PlayerStat model;
 
     [SerializeField] private AudioClip[] bgm;
     [SerializeField] private AudioSource sources;
@@ -35,12 +38,23 @@ public class BGM_Manager : MonoBehaviour
         }
     
     }
-
-    public void ChangeBGM(int cnt)
+    private void OnEnable()
     {
-        sources.clip = bgm[cnt];
+
+        model.OnStyleChanged += ChangeBGM;
+
+    }
+    private void OnDisable()
+    {
+
+        model.OnStyleChanged -= ChangeBGM;
+
+    }
+    public void ChangeBGM(int num)
+    {
+        sources.clip = bgm[num];
 
         sources.Play();
     }
-
+ 
 }
