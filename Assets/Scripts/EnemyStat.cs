@@ -1,18 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class EnemyStat : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+
+  
+    [SerializeField] private float hp;
+    [SerializeField] public EnemyStats stats;
+
+    public float HP { get { return hp; } set { hp = value;} }
+
+    private void Awake()
     {
-        
+        SetMaxHp();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetMaxHp()
     {
-        
+        hp = stats.maxHp;
     }
+
 }

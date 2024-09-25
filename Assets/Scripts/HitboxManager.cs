@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.LightingExplorerTableColumn;
 
 public class HitboxManager : MonoBehaviour
 {
@@ -12,6 +11,8 @@ public class HitboxManager : MonoBehaviour
 
     [SerializeField] BattleStyleHitbox curStyle;
 
+    [SerializeField] GameObject effect;
+
     Coroutine hitboxCoroutine;
 
     WaitForSeconds hitboxOffTime = new WaitForSeconds(0.15f);
@@ -19,6 +20,10 @@ public class HitboxManager : MonoBehaviour
     GameObject curBox;
 
     [SerializeField] bool atkType;
+
+    bool audioOnce;
+
+    int curCnt;
 
     private void Awake()
     {
@@ -37,20 +42,32 @@ public class HitboxManager : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (atkType || ChangeState.Instance.index == 3)
+        if (atkType || PlayerStat.Instance.StyleIndex  == 3)
         {   
             //다운
-            if (other.TryGetComponent<DisMob>(out DisMob component))
+            if (other.TryGetComponent<Enemy>(out Enemy component))
                 component.Down();
+            component.TakeDamage(10);
          
         }
         else
         {
             //경직
-            if (other.TryGetComponent<DisMob>(out DisMob component))
+            if (other.TryGetComponent<Enemy>(out Enemy component))
                 component.Hit();
-            
+            component.TakeDamage(5);
         }
+        
+        Vector3 vec = other.ClosestPoint(transform.position);
+
+        
+        if (audioOnce == false)
+        {
+            HitSoundManager.Instance.PlayerHitSound(vec, curCnt, atkType);
+            audioOnce = true;
+        }
+        
+        Instantiate(effect, vec, Quaternion.identity);
         
 
     }
@@ -60,6 +77,7 @@ public class HitboxManager : MonoBehaviour
        CoroutineStopCheck(hitboxCoroutine);
       
        ResetBox();
+        curCnt = cnt;
         atkType = false;
 
         hitboxCoroutine = StartCoroutine(OnHitbox(curStyle.atkColWFS[cnt], curStyle.AtkCol[cnt]));
@@ -69,6 +87,7 @@ public class HitboxManager : MonoBehaviour
     {
         CoroutineStopCheck(hitboxCoroutine);
         ResetBox();
+        curCnt = cnt;
         atkType = true;
 
         hitboxCoroutine = StartCoroutine(OnHitbox(curStyle.FAtkColWFS[cnt], curStyle.FAtkCol[cnt]));
@@ -80,6 +99,7 @@ public class HitboxManager : MonoBehaviour
         CoroutineStopCheck(hitboxCoroutine);
 
         ResetBox();
+        curCnt = cnt;
         atkType = false;
 
         hitboxCoroutine = StartCoroutine(OnHitboxEnter(curStyle.startLoopAtkWFS[cnt], curStyle.startLoopAtkCol[cnt],cnt));
@@ -104,6 +124,7 @@ public class HitboxManager : MonoBehaviour
     IEnumerator OnHitbox(WaitForSeconds wfs, GameObject box)
     {
         yield return wfs;
+        ResetAudioCall();
         box.SetActive(true);
         curBox = box;
         
@@ -114,6 +135,7 @@ public class HitboxManager : MonoBehaviour
     IEnumerator OnHitboxEnter(WaitForSeconds wfs, GameObject box, int cnt)
     {
         yield return wfs;
+        ResetAudioCall();
         box.SetActive(true);
         curBox = box;
 
@@ -127,6 +149,7 @@ public class HitboxManager : MonoBehaviour
         while (true)
         {
             yield return wfs;
+            ResetAudioCall();
             box.SetActive(true);
             curBox = box;
 
@@ -145,8 +168,16 @@ public class HitboxManager : MonoBehaviour
 
     void ResetBox()
     {
-        if(curBox != null)
-        curBox.SetActive(false);
+        if (curBox != null)
+        {
+            curBox.SetActive(false);
+            ResetAudioCall();
+        }
       
+    }
+
+    void ResetAudioCall()
+    {
+        audioOnce = false;
     }
 }

@@ -56,7 +56,7 @@ public class CharacterTrail : MonoBehaviour
     {
         for (int i = 0; i < trails.Length; i++)
         {
-            trails[i].OnTrail(color[cnt]);
+            trails[i].OnTrails(color[cnt]);
         }
     }
     public void OffTrail()
