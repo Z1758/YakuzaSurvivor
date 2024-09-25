@@ -46,11 +46,7 @@ public class MobPool : MonoBehaviour
                 GameObject m = Instantiate(prefabs[i]);
                 m.SetActive(false);
 
-                if (m.TryGetComponent<Enemy>(out Enemy me))
-                {
-                    me.dieEvent += ReturnPool;
-                }
-
+               
                 queue[i].Enqueue(m);
             }
         }
@@ -110,17 +106,26 @@ public class MobPool : MonoBehaviour
             GameObject m = queue[type].Dequeue();
             m.transform.position = spawnPoints[ran].position;
             m.SetActive(true);
+            if (m.TryGetComponent<Enemy>(out Enemy me))
+            {
+                me.ActiveEnemy();
+                me.dieEvent += ReturnPool;
+            }
+
+            
             activeMob.Add(m);
 
         }
         else
         {
             GameObject m = Instantiate(prefabs[type]);
+            m.transform.position = spawnPoints[ran].position;
             if (m.TryGetComponent<Enemy>(out Enemy me))
             {
+                me.ActiveEnemy();
                 me.dieEvent += ReturnPool;
             }
-            m.transform.position = spawnPoints[ran].position;
+          
     
             activeMob.Add(m);
         }
@@ -128,7 +133,11 @@ public class MobPool : MonoBehaviour
 
     void ReturnPool(GameObject mob, int type)
     {
-       
+        if (mob.TryGetComponent<Enemy>(out Enemy me))
+        {
+           
+            me.dieEvent -= ReturnPool;
+        }
         mob.SetActive(false);
         
 

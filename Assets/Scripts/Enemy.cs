@@ -53,17 +53,29 @@ public class Enemy : MonoBehaviour
  
     private void OnEnable()
     {
-      
-        StopAllCoroutines(); 
+       
+
+    }
+
+    public void ActiveEnemy()
+    {
+        StopAllCoroutines();
         es.SetMaxHp();
         atkCooldown = 0;
         Trace();
+        PlayVoice(es.stats.appearVoice);
+        
+    }
+
+    void PlayVoice(AudioClip clip )
+    {
+        EnemyVoiceManager.Instance.PlayerVoice(clip, transform.position);
     }
 
     void Die()
     {
         StopAllCoroutines();
-      
+        PlayVoice(es.stats.dieVoice);
         dieEvent?.Invoke(gameObject, es.stats.type);
 
     }
@@ -93,6 +105,7 @@ public class Enemy : MonoBehaviour
 
 
         AgentReset();
+        PlayVoice(es.stats.downVoice);
         isDown = true;
        
         StopAllCoroutines();
@@ -103,7 +116,8 @@ public class Enemy : MonoBehaviour
 
     public void Hit()
     {
-        // 데미지는 들어오도록
+      
+        PlayVoice(es.stats.hitVoice);
 
         if (isDown)
         {
@@ -191,6 +205,7 @@ public class Enemy : MonoBehaviour
    public IEnumerator AttackCorutine()
     {
         transform.LookAt(playerPos.position);
+        PlayVoice(es.stats.atkVoice);
         anim.Play("Atk");
         yield return atkHitWFS;
         atkCooldown = es.stats.defaultAtkCooldown;

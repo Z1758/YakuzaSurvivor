@@ -21,3 +21,8 @@ MonoBehaviour:
   atkHitTime: 0.3
   atkEndTime: 1
   defaultAtkCooldown: 3
+  appearVoice: {fileID: 8300000, guid: d2be58e8ec869214f9d75d83409d3755, type: 3}
+  atkVoice: {fileID: 8300000, guid: fa640438c08d8eb45b9c37bfe1b5e591, type: 3}
+  dieVoice: {fileID: 8300000, guid: ea868b6124a000148881b5057af12bad, type: 3}
+  downVoice: {fileID: 8300000, guid: 7ed7f8b0b4eaaa64fb9a49e80d5b83ca, type: 3}
+  hitVoice: {fileID: 8300000, guid: e9590143735ce0147a176415ef3cb466, type: 3}

@@ -14,4 +14,9 @@ public class EnemyStats : ScriptableObject
     [SerializeField] public float atkEndTime;
     [SerializeField] public float defaultAtkCooldown;
 
+    [SerializeField] public AudioClip appearVoice;
+    [SerializeField] public AudioClip atkVoice;
+    [SerializeField] public AudioClip dieVoice;
+    [SerializeField] public AudioClip downVoice;
+    [SerializeField] public AudioClip hitVoice;
 }
