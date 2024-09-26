@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 101
   explain:
-  - "\uB300\uCDA9 \uC2A4\uD0AC \uC124\uBA851"
-  - "\uB300\uCDA9 \uC2A4\uD0AC \uC124\uBA852"
-  - "\uB300\uCDA9 \uC2A4\uD0AC \uC124\uBA853"
-  - "\uB300\uCDA9 \uC2A4\uD0AC \uC124\uBA854"
+  - "\uC2A4\uD0AC1 \uC2B5\uB4DD"
+  - "\uC2A4\uD0AC1 \uAC15\uD6541"
+  - "\uC2A4\uD0AC1 \uAC15\uD6542"
+  - "\uC2A4\uD0AC1 \uAD81\uADF9"
   image: {fileID: 21300000, guid: 5160f7f6a37e20641a84363f67ab49cc, type: 3}
+  maxLevel: 4
+  type: 1
