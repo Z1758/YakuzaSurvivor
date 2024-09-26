@@ -29,7 +29,7 @@ public class PlayController : MonoBehaviour
     public int atkComboCnt;
 
     public bool isAtk;
-
+    public bool changedSpeed;
 
 
     Vector3 dir;
@@ -43,6 +43,7 @@ public class PlayController : MonoBehaviour
 
     private void Start()
     {
+        stat.OnDefaultSpeedChanged += ResetSpeed;
         ResetSpeed();
 
         State idle = new IdleState(this);
@@ -349,11 +350,26 @@ public class PlayController : MonoBehaviour
 
     public void SetSpeed(float s)
     {
+        changedSpeed = true;
         stat.SPEED = stat.DEFAULTSPEED * s;
     }
     public void ResetSpeed()
     {
-        stat.SPEED = stat.DEFAULTSPEED;
+        if (stat.StyleIndex == 3)
+        {
+            stat.SPEED = stat.DEFAULTSPEED;
+            SetSpeed(1.3f);
+            return;
+        }
+        else if (changedSpeed)
+        {
+            return;
+        }
+       
+
+            stat.SPEED = stat.DEFAULTSPEED;
+        
+      
     }
     public void DecreaseLoopCount()
     {
@@ -366,6 +382,16 @@ public class PlayController : MonoBehaviour
         playerAnimationManager.SetAnim(stat.StyleIndex);
         playerAnimationManager.ChangeAniCoroutine(stat.StyleIndex);
         playerSoundManager.SetSound(stat.StyleIndex);
+        if(stat.StyleIndex == 3)
+        {
+            SetSpeed(1.3f);
+        }
+        else
+        {
+            changedSpeed=false;
+            ResetSpeed();
+
+        }
 
         ComboReset();
         isAtk = true;

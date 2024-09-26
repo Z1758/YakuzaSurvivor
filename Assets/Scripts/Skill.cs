@@ -16,13 +16,13 @@ public class Skill : MonoBehaviour
 
     }
 
-    public virtual void SkillUp()
-    {
-
-    }
 
     public virtual void SkillLevelUp()
     {
         level++;
+        if (level == 1)
+        {
+            gameObject.SetActive(true);
+        }
     }
 }

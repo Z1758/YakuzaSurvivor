@@ -42,18 +42,17 @@ public class SkillManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space) && level < 16)
         {
-           StartCoroutine(LevelUP());
+            LevelUP();
         }
     }
 
-    public IEnumerator LevelUP()
+    public void LevelUP()
     {
        
       
         while (true)
         {
             
-            yield return new WaitForSeconds(0.02f);
 
             int type = -1;
             type = GetProbability(typeProbability);
@@ -119,7 +118,7 @@ public class SkillManager : MonoBehaviour
             {
                 break;
             }
-            Debug.Log("¿¬»êÁß");
+         
         }
 
 
@@ -129,6 +128,7 @@ public class SkillManager : MonoBehaviour
 
         Cursor.visible = true;
         selectUI.SetActive(true);
+        Time.timeScale = 0;
     }
 
     public void SetSkillUI()
@@ -207,13 +207,15 @@ public class SkillManager : MonoBehaviour
         resultSkills.Clear();
 
         level++;
+
+        Time.timeScale = 1.0f;
     }
 
 
     public int GetProbability(float[] probabilit)
     {
         float ran = Random.Range(0, 101);
-        Debug.Log(ran);
+     
         int result = 0;
         float temp = 0;
         for (int i = 0; i < probabilit.Length; i++)
