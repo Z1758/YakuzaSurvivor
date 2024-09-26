@@ -355,6 +355,7 @@ public class PlayController : MonoBehaviour
     }
     public void ResetSpeed()
     {
+        
         if (stat.StyleIndex == 3)
         {
             stat.SPEED = stat.DEFAULTSPEED;

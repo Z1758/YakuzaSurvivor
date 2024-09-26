@@ -29,7 +29,7 @@ public class SkillManager : MonoBehaviour
 
     [SerializeField] int activeSkillCount;
 
-    [SerializeField] int level = 1;
+ 
 
     private void Awake()
     {
@@ -40,8 +40,10 @@ public class SkillManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && level < 16)
+        if (Input.GetKeyDown(KeyCode.Space) )
         {
+            // 스타일 전환 중 타임 스케일 겹치는거 임시 방편
+            if(Time.timeScale > 0.8f)
             LevelUP();
         }
     }
@@ -206,7 +208,7 @@ public class SkillManager : MonoBehaviour
  
         resultSkills.Clear();
 
-        level++;
+       
 
         Time.timeScale = 1.0f;
     }

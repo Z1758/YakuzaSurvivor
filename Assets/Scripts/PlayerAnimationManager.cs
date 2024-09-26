@@ -136,6 +136,7 @@ public class PlayerAnimationManager : MonoBehaviour
         yield return time;
        
         Time.timeScale = 1.0f;
+        anim.updateMode = AnimatorUpdateMode.Normal;
         darkUI.SetActive(false);
         player.FAtkEnd();
 
@@ -200,7 +201,7 @@ public class PlayerAnimationManager : MonoBehaviour
         CoroutineStopCheck(atkAniEnd);
 
 
-
+        anim.updateMode = AnimatorUpdateMode.UnscaledTime;
         anim.Play(curStyle.styleChangeAni.name);
         atkAniEnd = StartCoroutine(ChangeAniEnd(curStyle.changeTimeWFS));
 
