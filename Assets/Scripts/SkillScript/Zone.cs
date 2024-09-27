@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 public class Zone : Skill
 {
     [SerializeField] GameObject zone;
-
+    [SerializeField] GameObject ult;
     [SerializeField] WaitForSeconds onDelay;
     [SerializeField] WaitForSeconds offDelay;
 
@@ -16,6 +16,8 @@ public class Zone : Skill
 
     [SerializeField] float scale;
 
+    [SerializeField] AudioClip ultClip;
+    [SerializeField] AudioClip ultBgmClip;
     private void Awake()
     {
 
@@ -29,7 +31,7 @@ public class Zone : Skill
         if (level == 1)
         {
             gameObject.SetActive(true);
-            coroutine = StartCoroutine(ActiveZone());
+            coroutine = StartCoroutine(ActiveZone(zone));
         }
 
     }
@@ -45,25 +47,38 @@ public class Zone : Skill
 
         if (level == info.maxLevel)
         {
-            scale = scale * 2;
+            StopAllCoroutines();
+            UISoundManager.Instance.PlayerUISound(ultClip);
+            BGM_Manager.Instance.ChangeBgmOnce(ultBgmClip);
+
+
+            zone.SetActive(false);
+
+
+            onDelay = new WaitForSeconds(1.0f);
+            offDelay = new WaitForSeconds(2.7f);
+
+            coroutine = StartCoroutine(ActiveZone(ult));
+            return;
             
         }
         zone.transform.localScale = new Vector3(zone.transform.localScale.x + scale, zone.transform.localScale.y, zone.transform.localScale.z + scale);
     }
   
-    IEnumerator ActiveZone()
+    IEnumerator ActiveZone(GameObject obj)
     {
         while (true)
         {
 
-            zone.SetActive(true);
+            obj.SetActive(true);
             yield return offDelay;
-            zone.SetActive(false);
+            obj.SetActive(false);
             yield return onDelay;
 
 
         }
 
     }
+
 
 }
