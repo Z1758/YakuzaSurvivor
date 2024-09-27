@@ -23,7 +23,16 @@ public class Zone : Skill
         offDelay = new WaitForSeconds(0.3f);
 
     }
-  
+
+    public override void UseSkill()
+    {
+        if (level == 1)
+        {
+            gameObject.SetActive(true);
+            coroutine = StartCoroutine(ActiveZone());
+        }
+
+    }
 
 
     public override void SkillLevelUp()
@@ -31,8 +40,7 @@ public class Zone : Skill
         level++;
         if (level == 1)
         {
-            gameObject.SetActive(true);
-            coroutine = StartCoroutine(ActiveZone());
+            UseSkill();
         }
 
         if (level == info.maxLevel)

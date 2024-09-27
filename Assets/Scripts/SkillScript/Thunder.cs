@@ -33,6 +33,11 @@ public class Thunder : Skill
     }
 
  
+    public override void UseSkill()
+    {
+        gameObject.SetActive(true);
+        coroutine = StartCoroutine(ActiveThunder());
+    }
 
   
     public override void SkillLevelUp()
@@ -40,8 +45,7 @@ public class Thunder : Skill
         level++;
         if (level == 1)
         {
-            gameObject.SetActive(true);
-            coroutine = StartCoroutine(ActiveThunder());
+            UseSkill();
         }
         count--;
 

@@ -15,6 +15,6 @@ MonoBehaviour:
   id: 1
   explain:
   - "\uACF5\uACA9\uB825 \uC99D\uAC00"
-  image: {fileID: 21300000, guid: 3bcee1dda201d754891c242c6df57b1e, type: 3}
+  image: {fileID: 21300000, guid: 0ef36a696451c7640ae253ec193690c6, type: 3}
   maxLevel: 5
   type: 0

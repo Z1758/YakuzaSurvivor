@@ -15,6 +15,6 @@ MonoBehaviour:
   id: 201
   explain:
   - "\uD638\uB5A8"
-  image: {fileID: 21300000, guid: eaffc20b940751240bb1cde78f2b8aee, type: 3}
+  image: {fileID: 21300000, guid: edc9794a1eca0964383f9da71b90bba4, type: 3}
   maxLevel: 1
   type: 2

@@ -1,5 +1,6 @@
 
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 
@@ -39,7 +40,8 @@ public class PlayController : MonoBehaviour
     Vector3 vertical;
     Vector3 horizontal;
 
-
+    public delegate bool HitEvent(Vector3 vec);
+    public HitEvent hitEvent;
 
     private void Start()
     {
@@ -413,6 +415,14 @@ public class PlayController : MonoBehaviour
 
     public void PlayerTakeDamage(int damage, Vector3 vec)
     {
+        
+        if(hitEvent != null && hitEvent(vec))
+        {
+
+
+            return;
+        }
+        
         stat.HP-=damage;
         hitboxManager.PlayerHit(vec);
     }

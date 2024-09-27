@@ -99,8 +99,9 @@ public class SkillManager : MonoBehaviour
 
 
             //중복 제거
-            if (activeSkills.Count > 0)
+            if (passiveSkills.Count + activeSkills.Count+ spSkills.Count > 3)
             {
+               
                 bool overlap = false;
                 foreach (Skill s in resultSkills)
                 {
