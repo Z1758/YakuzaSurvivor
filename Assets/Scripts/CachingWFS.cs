@@ -13,7 +13,7 @@ public class CachingWFS : MonoBehaviour
     public WaitForSeconds[] atkHitWFS;
     public WaitForSeconds[] atkEndWFS;
 
-
+ 
     private void Awake()
     {
         if (null == instance)
@@ -51,5 +51,7 @@ public class CachingWFS : MonoBehaviour
             atkHitWFS[i] = new WaitForSeconds(enemyStats[i].atkHitTime);
             atkEndWFS[i] = new WaitForSeconds(enemyStats[i].atkEndTime);
         }
+
+
     }
 }

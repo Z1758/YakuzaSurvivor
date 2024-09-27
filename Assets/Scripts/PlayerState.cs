@@ -282,6 +282,7 @@ public class LoopAttackState : State
         loopCount = 0;
         controller.anim.SetInteger("AniInt", EnumConvert<int>.Cast(AniState.LoopEnd));
         controller.LoopAtkEnd();
+        controller.changedSpeed = false;
         controller.ResetSpeed();
 
         isLoopEnd = true;

@@ -17,7 +17,7 @@ TagManager:
   - DieEnemy
   - Enemy
   - EnemyBullet
-  - PlayerHixbox
+  - PlayerHitbox
   - 
   - 
   - 

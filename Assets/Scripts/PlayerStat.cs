@@ -44,9 +44,10 @@ public class PlayerStat : MonoBehaviour
     public int StyleIndex { get { return styleIndex; } set { styleIndex = value; OnStyleChanged?.Invoke(styleIndex); } }
     public UnityAction<int> OnStyleChanged;
 
-    public int ATK { get { return atk; } }
-    public float DEFAULTSPEED { get { return defaultSpeed; } }
+    public int ATK { get { return atk; } set{ atk = value; } }
+    public float DEFAULTSPEED { get { return defaultSpeed; } set { defaultSpeed = value; OnDefaultSpeedChanged?.Invoke(); } }
+    public UnityAction OnDefaultSpeedChanged;
     public float SPEED { get { return speed; } set { speed = value; } }
-
+   
     public AttackMultiplier[] Multiplier { get { return multiplier; } }
 }
