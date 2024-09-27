@@ -54,9 +54,13 @@ public class SkillManager : MonoBehaviour
       
         while (true)
         {
-            
+            if(passiveSkills.Count <= 0 && activeSkills.Count <= 0 && spSkills.Count <= 0)
+            {
+                Debug.Log("¸¸·¾");
+                return;
+            }
 
-            int type = -1;
+                int type = -1;
             type = GetProbability(typeProbability);
  
 

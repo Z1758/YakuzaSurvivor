@@ -14,10 +14,12 @@ public class ThrowKnife : Skill
 
     public WaitForSeconds knifeWFS;
 
+    int count;
 
     private void Awake()
     {
-        knifeWFS = new WaitForSeconds(1.0f);
+        count = info.maxLevel+1;
+        knifeWFS = new WaitForSeconds(0.2f);
   
 
         knives = new Queue<Knife>();
@@ -46,12 +48,28 @@ public class ThrowKnife : Skill
             throwCoroutine = StartCoroutine(ThrowingCoroutine());
         }
     }
+    public override void SkillLevelUp()
+    {
+        level++;
+        if (level == 1)
+        {
+            gameObject.SetActive(true);
+        }
+        count--;
 
+        if(level == info.maxLevel)
+        {
+            count--;
+        }
+    }
     IEnumerator ThrowingCoroutine()
     {
         while (true)
         {
-            yield return knifeWFS;
+            for (int i = 0; i < count; i++)
+            {
+                yield return knifeWFS;
+            }
             Knife k =  knives.Dequeue();
             k.transform.position = transform.position;
             k.transform.rotation = transform.rotation;

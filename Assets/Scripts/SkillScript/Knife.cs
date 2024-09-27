@@ -20,7 +20,7 @@ public class Knife : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
     }
-
+  
     public void Throwing()
     {
         StopAllCoroutines();
@@ -35,7 +35,7 @@ public class Knife : MonoBehaviour
         HitSoundManager.Instance.SkillSound(transform.position, hitClip);
 
         if (other.TryGetComponent<Enemy>(out Enemy component))
-            component.TakeDamage(PlayerStat.Instance.ATK * 0.5f , HitAniType.Hit);
+            component.TakeDamage(PlayerStat.Instance.ATK * 0.5f , HitAniType.None);
 
         StopAllCoroutines();
         returnEvent?.Invoke(this);
