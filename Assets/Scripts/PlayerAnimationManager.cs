@@ -140,6 +140,11 @@ public class PlayerAnimationManager : MonoBehaviour
         darkUI.SetActive(false);
         player.FAtkEnd();
 
+        if(SkillManager.Instance.GetSkillPoint() > 0)
+        {
+            SkillManager.Instance.SetSelect();
+        }
+
 
 
     }

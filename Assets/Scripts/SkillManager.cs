@@ -8,6 +8,7 @@ using UnityEngine.UI;
 
 public class SkillManager : MonoBehaviour
 {
+    private static SkillManager instance;
     const int maxLevel = 4;
 
     [SerializeField] GameObject selectUI;
@@ -29,26 +30,59 @@ public class SkillManager : MonoBehaviour
 
     [SerializeField] int activeSkillCount;
 
+    [SerializeField] int skillPoint;
  
+
+    public int GetSkillPoint()
+    {
+        return skillPoint;
+    }
 
     private void Awake()
     {
-       
+        if (null == instance)
+        {
+
+            instance = this;
+
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
         resultSkills = new List<Skill>();
         
     }
+    public static SkillManager Instance
+    {
 
+        get
+        {
+
+            return instance;
+        }
+
+    }
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space) )
         {
-            // 스타일 전환 중 타임 스케일 겹치는거 임시 방편
-            if(Time.timeScale > 0.8f)
+            
+            
             LevelUP();
         }
     }
 
     public void LevelUP()
+    {
+        skillPoint++;
+        if (Time.timeScale > 0.8f)
+            SetSelect();
+    }
+
+
+    public void SetSelect()
     {
        
       
@@ -57,6 +91,7 @@ public class SkillManager : MonoBehaviour
             if(passiveSkills.Count <= 0 && activeSkills.Count <= 0 && spSkills.Count <= 0)
             {
                 Debug.Log("만렙");
+                skillPoint = 0;
                 return;
             }
 
@@ -213,9 +248,16 @@ public class SkillManager : MonoBehaviour
  
         resultSkills.Clear();
 
+        skillPoint--;
        
 
         Time.timeScale = 1.0f;
+
+        if(skillPoint > 0)
+        {
+            SetSelect();
+        }
+
     }
 
 
