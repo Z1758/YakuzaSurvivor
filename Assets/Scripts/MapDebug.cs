@@ -7,17 +7,7 @@ public class MapDebug : MonoBehaviour
     [SerializeField] Transform playerDebugSpawn;
     [SerializeField] Transform EnemyDebugSpawn;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+  
 
     private void OnTriggerEnter(Collider other)
     {
@@ -25,11 +15,15 @@ public class MapDebug : MonoBehaviour
         if(other.tag == "Enemy")
         {
             
-            other.transform.position = EnemyDebugSpawn.position;
+            other.gameObject.transform.position = EnemyDebugSpawn.position;
         }
         else if (other.tag == "Player")
         {
-            other.transform.position = playerDebugSpawn.position;
+            other.gameObject.GetComponent<CharacterController>().enabled = false;
+           
+            other.gameObject.transform.position = playerDebugSpawn.position;
+
+            other.gameObject.GetComponent<CharacterController>().enabled = true;
         }
     }
 

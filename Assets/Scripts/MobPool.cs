@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MobPool : MonoBehaviour
 {
+  
     [SerializeField] CSV_Parser csv;
     [SerializeField] Transform[] spawnPoints;
     public static MobPool Instance { get; private set; }
@@ -15,6 +16,8 @@ public class MobPool : MonoBehaviour
 
     Coroutine spawnCoroutine;
 
+    WaitForSeconds disableDelay;
+ 
     private void Awake()
     {
         if (Instance == null)
@@ -30,7 +33,8 @@ public class MobPool : MonoBehaviour
 
         activeMob = new List<GameObject>();
 
-      
+        disableDelay = new WaitForSeconds(2.0f);
+
         queue = new Queue<GameObject>[prefabs.Length];
         for(int i = 0; i < queue.Length; i++)
         {
@@ -46,11 +50,7 @@ public class MobPool : MonoBehaviour
                 GameObject m = Instantiate(prefabs[i]);
                 m.SetActive(false);
 
-                if (m.TryGetComponent<Enemy>(out Enemy me))
-                {
-                    me.dieEvent += ReturnPool;
-                }
-
+               
                 queue[i].Enqueue(m);
             }
         }
@@ -110,17 +110,26 @@ public class MobPool : MonoBehaviour
             GameObject m = queue[type].Dequeue();
             m.transform.position = spawnPoints[ran].position;
             m.SetActive(true);
+            if (m.TryGetComponent<Enemy>(out Enemy me))
+            {
+                me.ActiveEnemy();
+                me.dieEvent += ReturnPool;
+            }
+
+            
             activeMob.Add(m);
 
         }
         else
         {
             GameObject m = Instantiate(prefabs[type]);
+            m.transform.position = spawnPoints[ran].position;
             if (m.TryGetComponent<Enemy>(out Enemy me))
             {
+                me.ActiveEnemy();
                 me.dieEvent += ReturnPool;
             }
-            m.transform.position = spawnPoints[ran].position;
+          
     
             activeMob.Add(m);
         }
@@ -128,13 +137,28 @@ public class MobPool : MonoBehaviour
 
     void ReturnPool(GameObject mob, int type)
     {
-       
-        mob.SetActive(false);
-        
+
+
+        if (mob.TryGetComponent<Enemy>(out Enemy me))
+        {
+           
+            me.dieEvent -= ReturnPool;
+        }
+
+     
 
         queue[type].Enqueue(mob);
         activeMob.Remove(mob);
+
+        StartCoroutine(DisableEnemy(mob));
+
+       
     }
 
- 
+    IEnumerator DisableEnemy(GameObject mob )
+    {
+        yield return disableDelay;
+
+        mob.SetActive(false);
+    }
 }

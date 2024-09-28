@@ -30,7 +30,7 @@ public class PlayerSoundManager : MonoBehaviour
     public void PlayerChangeSound(int cnt)
     {
         if (styles[cnt].changeClip != null)
-            soundSource.PlayOneShot(styles[cnt].changeClip);
+            voiceSource.PlayOneShot(styles[cnt].changeClip);
         if (styles[cnt].changeSwingClip != null)
             soundSource.PlayOneShot(styles[cnt].changeSwingClip);
     }

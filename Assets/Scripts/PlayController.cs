@@ -1,10 +1,14 @@
 
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 
 public class PlayController : MonoBehaviour
 {
+
+  
+
     PlayerState ps;
 
 
@@ -26,7 +30,7 @@ public class PlayController : MonoBehaviour
     public int atkComboCnt;
 
     public bool isAtk;
-
+    public bool changedSpeed;
 
 
     Vector3 dir;
@@ -36,10 +40,12 @@ public class PlayController : MonoBehaviour
     Vector3 vertical;
     Vector3 horizontal;
 
-
+    public delegate bool HitEvent(Vector3 vec);
+    public HitEvent hitEvent;
 
     private void Start()
     {
+        stat.OnDefaultSpeedChanged += ResetSpeed;
         ResetSpeed();
 
         State idle = new IdleState(this);
@@ -346,11 +352,27 @@ public class PlayController : MonoBehaviour
 
     public void SetSpeed(float s)
     {
+        changedSpeed = true;
         stat.SPEED = stat.DEFAULTSPEED * s;
     }
     public void ResetSpeed()
     {
-        stat.SPEED = stat.DEFAULTSPEED;
+        
+        if (stat.StyleIndex == 3)
+        {
+            stat.SPEED = stat.DEFAULTSPEED;
+            SetSpeed(1.3f);
+            return;
+        }
+        else if (changedSpeed)
+        {
+            return;
+        }
+       
+
+            stat.SPEED = stat.DEFAULTSPEED;
+        
+      
     }
     public void DecreaseLoopCount()
     {
@@ -363,6 +385,16 @@ public class PlayController : MonoBehaviour
         playerAnimationManager.SetAnim(stat.StyleIndex);
         playerAnimationManager.ChangeAniCoroutine(stat.StyleIndex);
         playerSoundManager.SetSound(stat.StyleIndex);
+        if(stat.StyleIndex == 3)
+        {
+            SetSpeed(1.3f);
+        }
+        else
+        {
+            changedSpeed=false;
+            ResetSpeed();
+
+        }
 
         ComboReset();
         isAtk = true;
@@ -371,13 +403,27 @@ public class PlayController : MonoBehaviour
 
     public void ColOff()
     {
-        this.gameObject.layer = 7;
+        this.gameObject.layer = LayerNumber.playerPeneLayer;
      
     }
 
     public void ColOn()
     {
-        this.gameObject.layer = 6;
+        this.gameObject.layer = LayerNumber.playerLayer;
      
+    }
+
+    public void PlayerTakeDamage(int damage, Vector3 vec)
+    {
+        
+        if(hitEvent != null && hitEvent(vec))
+        {
+
+
+            return;
+        }
+        
+        stat.HP-=damage;
+        hitboxManager.PlayerHit(vec);
     }
 }
