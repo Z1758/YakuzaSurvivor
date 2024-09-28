@@ -6,9 +6,8 @@ using UnityEngine.UIElements;
 public class Zone : Skill
 {
     [SerializeField] GameObject zone;
-    [SerializeField] GameObject ult;
-    [SerializeField] WaitForSeconds onDelay;
-    [SerializeField] WaitForSeconds offDelay;
+  
+
 
 
 
@@ -16,8 +15,7 @@ public class Zone : Skill
 
     [SerializeField] float scale;
 
-    [SerializeField] AudioClip ultClip;
-    [SerializeField] AudioClip ultBgmClip;
+  
     private void Awake()
     {
 
@@ -47,9 +45,7 @@ public class Zone : Skill
 
         if (level == info.maxLevel)
         {
-            StopAllCoroutines();
-            UISoundManager.Instance.PlayerUISound(ultClip);
-            BGM_Manager.Instance.ChangeBgmOnce(ultBgmClip);
+            GetUlt();
 
 
             zone.SetActive(false);
@@ -64,7 +60,13 @@ public class Zone : Skill
         }
         zone.transform.localScale = new Vector3(zone.transform.localScale.x + scale, zone.transform.localScale.y, zone.transform.localScale.z + scale);
     }
-  
+
+    public override void GetUlt()
+    {
+        StopAllCoroutines();
+        UISoundManager.Instance.PlayerUISound(ultClip);
+        BGM_Manager.Instance.ChangeBgmOnce(ultBgmClip);
+    }
     IEnumerator ActiveZone(GameObject obj)
     {
         while (true)

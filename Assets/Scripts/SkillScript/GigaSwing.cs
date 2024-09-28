@@ -7,6 +7,7 @@ public class GigaSwing : MonoBehaviour
     [SerializeField] GameObject col;
     [SerializeField] AudioClip clip;
     [SerializeField] float cooltime;
+  
     WaitForSeconds delay;
     WaitForSeconds duration;
 

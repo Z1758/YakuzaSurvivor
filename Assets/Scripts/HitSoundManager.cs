@@ -53,6 +53,7 @@ public class HitSoundManager : MonoBehaviour
 
     public void SkillSound(Vector3 vec, AudioClip clip)
     {
+      
         transform.position = vec;
 
 

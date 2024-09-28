@@ -177,7 +177,17 @@ public class SkillManager : MonoBehaviour
     {
         for(int i = 0; i < resultSkills.Count; i++)
         {
-            image[i].sprite = resultSkills[i].info.image;
+            if (resultSkills[i].level + 1 == resultSkills[i].info.maxLevel && resultSkills[i].info.type == SkillType.Active)
+            {
+                image[i].sprite = resultSkills[i].info.ultImage;
+            }
+            else
+            {
+                image[i].sprite = resultSkills[i].info.image;
+            }
+
+
+
             if (resultSkills[i].info.type == SkillType.Active)
             {
                 text[i].text = resultSkills[i].info.explain[resultSkills[i].level];

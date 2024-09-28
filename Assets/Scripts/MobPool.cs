@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MobPool : MonoBehaviour
 {
+  
     [SerializeField] CSV_Parser csv;
     [SerializeField] Transform[] spawnPoints;
     public static MobPool Instance { get; private set; }
@@ -16,7 +17,7 @@ public class MobPool : MonoBehaviour
     Coroutine spawnCoroutine;
 
     WaitForSeconds disableDelay;
-
+ 
     private void Awake()
     {
         if (Instance == null)

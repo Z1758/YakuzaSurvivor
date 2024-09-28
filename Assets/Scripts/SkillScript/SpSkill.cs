@@ -5,9 +5,7 @@ using UnityEngine;
 public class SpSkill : Skill
 {
 
-    [SerializeField] TiggerDrop kiryu;
-    [SerializeField] AudioClip clip;
-    [SerializeField] AudioClip bgmClip;
+  
     [SerializeField] float cooltime;
     WaitForSeconds cool;
     bool coolTimeFlag;
@@ -22,10 +20,10 @@ public class SpSkill : Skill
         {
             Vector3 newVec = new Vector3((transform.position.x + vec.x) / 2, 0f, (transform.position.z + vec.z) / 2);
 
-            kiryu.transform.position = newVec;
-            kiryu.transform.LookAt(vec);
-            kiryu.gameObject.SetActive(true);
-            kiryu.AttackTiggerDrop();
+            ult.transform.position = newVec;
+            ult.transform.LookAt(vec);
+            ult.gameObject.SetActive(true);
+          
             coolTimeFlag = true;
 
             StartCoroutine(CoolDown());
@@ -47,8 +45,8 @@ public class SpSkill : Skill
 
     public override void UseSkill()
     {
-        UISoundManager.Instance.PlayerUISound(clip);
-        BGM_Manager.Instance.ChangeBgmOnce(bgmClip);
+        UISoundManager.Instance.PlayerUISound(ultClip);
+        BGM_Manager.Instance.ChangeBgmOnce(ultBgmClip);
         PlayController player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayController>();
         player.hitEvent = new PlayController.HitEvent(CoolDownCheck);
 

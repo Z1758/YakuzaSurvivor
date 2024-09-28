@@ -9,9 +9,17 @@ public class Skill : MonoBehaviour
 {
     public SkillInfo info;
     public int level;
-
-   
+    [SerializeField] protected GameObject ult;
+    [SerializeField] protected AudioClip ultClip;
+    [SerializeField] protected AudioClip ultBgmClip;
+    protected WaitForSeconds onDelay;
+    protected WaitForSeconds offDelay;
     public virtual void UseSkill()
+    {
+
+    }
+
+    public virtual void GetUlt()
     {
 
     }
