@@ -18,6 +18,7 @@ MonoBehaviour:
   - "\uC2A4\uD0AC1 \uAC15\uD6541"
   - "\uC2A4\uD0AC1 \uAC15\uD6542"
   - "\uC2A4\uD0AC1 \uAD81\uADF9"
-  image: {fileID: 21300000, guid: 5160f7f6a37e20641a84363f67ab49cc, type: 3}
+  image: {fileID: 21300000, guid: 8acac1b70bc382b478ff2aec352065cf, type: 3}
+  ultImage: {fileID: 21300000, guid: 0a3e46729775a274faefca8bfa461ca1, type: 3}
   maxLevel: 4
   type: 1

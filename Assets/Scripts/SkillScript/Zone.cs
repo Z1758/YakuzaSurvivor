@@ -6,9 +6,8 @@ using UnityEngine.UIElements;
 public class Zone : Skill
 {
     [SerializeField] GameObject zone;
+  
 
-    [SerializeField] WaitForSeconds onDelay;
-    [SerializeField] WaitForSeconds offDelay;
 
 
 
@@ -16,6 +15,7 @@ public class Zone : Skill
 
     [SerializeField] float scale;
 
+  
     private void Awake()
     {
 
@@ -23,7 +23,16 @@ public class Zone : Skill
         offDelay = new WaitForSeconds(0.3f);
 
     }
-  
+
+    public override void UseSkill()
+    {
+        if (level == 1)
+        {
+            gameObject.SetActive(true);
+            coroutine = StartCoroutine(ActiveZone(zone));
+        }
+
+    }
 
 
     public override void SkillLevelUp()
@@ -31,31 +40,47 @@ public class Zone : Skill
         level++;
         if (level == 1)
         {
-            gameObject.SetActive(true);
-            coroutine = StartCoroutine(ActiveZone());
+            UseSkill();
         }
 
         if (level == info.maxLevel)
         {
-            scale = scale * 2;
+            GetUlt();
+
+
+            zone.SetActive(false);
+
+
+            onDelay = new WaitForSeconds(1.0f);
+            offDelay = new WaitForSeconds(2.7f);
+
+            coroutine = StartCoroutine(ActiveZone(ult));
+            return;
             
         }
         zone.transform.localScale = new Vector3(zone.transform.localScale.x + scale, zone.transform.localScale.y, zone.transform.localScale.z + scale);
     }
-  
-    IEnumerator ActiveZone()
+
+    public override void GetUlt()
+    {
+        StopAllCoroutines();
+        UISoundManager.Instance.PlayerUISound(ultClip);
+        BGM_Manager.Instance.ChangeBgmOnce(ultBgmClip);
+    }
+    IEnumerator ActiveZone(GameObject obj)
     {
         while (true)
         {
 
-            zone.SetActive(true);
+            obj.SetActive(true);
             yield return offDelay;
-            zone.SetActive(false);
+            obj.SetActive(false);
             yield return onDelay;
 
 
         }
 
     }
+
 
 }

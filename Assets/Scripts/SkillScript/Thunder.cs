@@ -8,31 +8,36 @@ public class Thunder : Skill
     [SerializeField] CheckDis cd;
     
     [SerializeField] WaitForSeconds delay;
-    [SerializeField] WaitForSeconds delay2;
+ 
     int count;
 
     Coroutine coroutine;
 
-    List<GameObject> thunders;
+    GameObject thunder;
 
     private void Awake()
     {
         count =  info.maxLevel + 1;
+        onDelay = new WaitForSeconds(2.0f);
+        
+
         delay = new WaitForSeconds(0.4f);
 
-        thunders = new List<GameObject>();
 
-      
-            GameObject obj = Instantiate(thunderPrefabs);
 
-            obj.gameObject.SetActive(false);
+        thunder = Instantiate(thunderPrefabs);
 
-            thunders.Add(obj);
- 
+        thunder.SetActive(false);
+           
 
     }
 
  
+    public override void UseSkill()
+    {
+        gameObject.SetActive(true);
+        coroutine = StartCoroutine(ActiveThunder());
+    }
 
   
     public override void SkillLevelUp()
@@ -40,31 +45,51 @@ public class Thunder : Skill
         level++;
         if (level == 1)
         {
-            gameObject.SetActive(true);
-            coroutine = StartCoroutine(ActiveThunder());
+            UseSkill();
         }
         count--;
 
         if (level == info.maxLevel)
         {
-            delay2 = new WaitForSeconds(0.1f);
-            GameObject obj = Instantiate(thunderPrefabs);
+            GetUlt();
 
-            obj.gameObject.SetActive(false);
-
-            thunders.Add(obj);
+            coroutine = StartCoroutine(ActiveUlt());
         }
 
     }
+
+    public override void GetUlt()
+    {
+        StopAllCoroutines();
+        UISoundManager.Instance.PlayerUISound(ultClip);
+        BGM_Manager.Instance.ChangeBgmOnce(ultBgmClip);
+    }
+
     public void ActiveSkill(GameObject obj)
     {
         if (MobPool.Instance.activeMob.Count > 0)
         {
-            cd.NearDis(obj);
+            
+            
+            if(level == info.maxLevel)
+            {
+                GameObject vec = cd.NearDis();
+
+
+                obj.transform.position = vec.transform.position + (vec.transform.forward * 2f);
+                obj.transform.LookAt(vec.transform);
+               
+            }
+            else
+            {
+                obj.transform.position = cd.NearDis().transform.position;
+            }
+
             obj.SetActive(true);
         }
     }
 
+   
     IEnumerator ActiveThunder()
     {
         while (true)
@@ -75,19 +100,24 @@ public class Thunder : Skill
                 yield return delay;
               
             }
-            for(int i=0; i< thunders.Count; i++)
-            {
-                if (i == 1)
-                {
-                    yield return delay2;
-                }
+            
 
-
-                ActiveSkill(thunders[i]);
-            }
+                ActiveSkill(thunder);
+            
 
            
         }
      
+    }
+
+    IEnumerator ActiveUlt()
+    {
+        while (true)
+        {
+            ActiveSkill(ult);
+            yield return onDelay;
+
+        }
+
     }
 }

@@ -52,7 +52,14 @@ public class BGM_Manager : MonoBehaviour
     }
     public void ChangeBGM(int num)
     {
-        sources.clip = bgm[num];
+        sources.clip =bgm[num];
+
+        sources.Play();
+    }
+
+    public void ChangeBgmOnce(AudioClip clip) 
+    {
+        sources.clip = clip;
 
         sources.Play();
     }

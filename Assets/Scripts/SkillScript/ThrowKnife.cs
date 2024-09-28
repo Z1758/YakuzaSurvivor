@@ -12,15 +12,14 @@ public class ThrowKnife : Skill
 
     Coroutine throwCoroutine;
 
-    public WaitForSeconds knifeWFS;
-
+   
     int count;
 
     private void Awake()
     {
         count = info.maxLevel+1;
-        knifeWFS = new WaitForSeconds(0.2f);
-  
+        onDelay = new WaitForSeconds(0.2f);
+        offDelay = new WaitForSeconds(1.5f);
 
         knives = new Queue<Knife>();
 
@@ -59,16 +58,33 @@ public class ThrowKnife : Skill
 
         if(level == info.maxLevel)
         {
-            count--;
+            GetUlt();
+
+
+
+            onDelay = new WaitForSeconds(1.0f);
+
+            transform.position = new Vector3(transform.position.x, 0f, transform.position.z);
+            
+            throwCoroutine = StartCoroutine(ThrowingUlt());
+            return;
         }
     }
+
+    public override void GetUlt()
+    {
+        StopAllCoroutines();
+        UISoundManager.Instance.PlayerUISound(ultClip);
+        BGM_Manager.Instance.ChangeBgmOnce(ultBgmClip);
+    }
+
     IEnumerator ThrowingCoroutine()
     {
         while (true)
         {
             for (int i = 0; i < count; i++)
             {
-                yield return knifeWFS;
+                yield return onDelay;
             }
             Knife k =  knives.Dequeue();
             k.transform.position = transform.position;
@@ -78,7 +94,19 @@ public class ThrowKnife : Skill
         }
     }
 
-    
+    IEnumerator ThrowingUlt()
+    {
+        while (true)
+        {
+            ult.transform.position = transform.position;
+            ult.transform.rotation = transform.rotation;
+            ult.gameObject.SetActive(true);
+            yield return offDelay;
+
+            ult.gameObject.SetActive(false);
+            yield return onDelay;
+        }
+    }
 
     void ReturnKnife(Knife k)
     {

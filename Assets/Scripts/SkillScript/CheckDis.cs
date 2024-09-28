@@ -9,7 +9,7 @@ public class CheckDis : MonoBehaviour
 
   
 
-    public void NearDis(GameObject obj)
+    public GameObject NearDis()
     {
         colliders = Physics.OverlapSphere(transform.position, 10f, mask);
         GameObject minMob = null;
@@ -34,15 +34,16 @@ public class CheckDis : MonoBehaviour
 
         if (minMob == null)
         {
-            CheckMinBySqr(obj);
+            return CheckMinBySqr();
 
 
-            return;
+            
         }
-
-        obj.transform.position = minMob.transform.position;
-
         colliders = null;
+
+        return minMob;
+
+       
     }
 
     private void OnDrawGizmos()
@@ -52,7 +53,7 @@ public class CheckDis : MonoBehaviour
     }
 
 
-    void CheckMinBySqr(GameObject obj)
+    GameObject CheckMinBySqr()
     {
       
         List<GameObject> targets = MobPool.Instance.activeMob;
@@ -62,9 +63,10 @@ public class CheckDis : MonoBehaviour
         closestTarget = targets.MinBy(target => (target.transform.position - transform.position).sqrMagnitude);
         if (closestTarget == null)
         {
-            return;
+            return null;
         }
 
-        obj.transform.position = closestTarget.transform.position;
+        return closestTarget;
+        
     }
 }
