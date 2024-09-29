@@ -1,0 +1,20 @@
+ManifestFileVersion: 0
+CRC: 1123925285
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 0e2807d9c5394b6463dfa35acd396979
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 5ad585dd02dfb5016c0dad519eab8f49
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 0e2807d9c5394b6463dfa35acd396979
+HashAppended: 0
+ClassTypes:
+- Class: 49
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/AnimationTexture/Enemy6.bytes
+Dependencies: []
