@@ -62,11 +62,6 @@ public class MyCamera : MonoBehaviour
         pc.InputDir();
     }
 
-    private void FixedUpdate()
-    {
-      
-    }
-
 
     private void LateUpdate()
     {
