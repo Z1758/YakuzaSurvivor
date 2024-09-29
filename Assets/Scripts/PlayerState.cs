@@ -371,7 +371,7 @@ public class ChangeState : State
     {
 
 
-        controller.ChangeStyle();
+        controller.SetChangeStyle();
     }
 
     public override void ExitState()

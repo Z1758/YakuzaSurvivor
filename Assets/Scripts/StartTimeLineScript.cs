@@ -20,7 +20,7 @@ public class StartTimeLineScript : MonoBehaviour
 
     public void StartGame()
     {
-        pc.ChangeStyle();
+        pc.SetChangeStyle();
         pi.enabled = true;
     }
 }

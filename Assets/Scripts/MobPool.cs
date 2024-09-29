@@ -114,6 +114,7 @@ public class MobPool : MonoBehaviour
             {
                 me.ActiveEnemy();
                 me.dieEvent += ReturnPool;
+              
             }
 
             
@@ -138,6 +139,7 @@ public class MobPool : MonoBehaviour
     void ReturnPool(GameObject mob, int type)
     {
 
+  
 
         if (mob.TryGetComponent<Enemy>(out Enemy me))
         {
@@ -157,8 +159,9 @@ public class MobPool : MonoBehaviour
 
     IEnumerator DisableEnemy(GameObject mob )
     {
+        PlayerStat.Instance.HitGauge += 0.5f;
         yield return disableDelay;
-
+        ItemManager.Instance.CreateItem(mob.transform.position);
         mob.SetActive(false);
     }
 }

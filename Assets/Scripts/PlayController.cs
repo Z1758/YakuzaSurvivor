@@ -1,4 +1,5 @@
 
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -6,16 +7,13 @@ using UnityEngine.InputSystem;
 
 public class PlayController : MonoBehaviour
 {
-
-  
-
+ 
     PlayerState ps;
 
 
     [SerializeField] public Animator anim;
     [SerializeField] private CharacterController cc;
-    [SerializeField] private Rigidbody rigid;
-
+   
     [SerializeField] private Transform cameraPos;
     [SerializeField] private PlayerStat stat;
     [SerializeField] PlayerAnimationManager playerAnimationManager;
@@ -104,10 +102,15 @@ public class PlayController : MonoBehaviour
             if (stat.StyleIndex != index - 1 && index != 0)
             {
 
-                stat.StyleIndex = index - 1;
-                ps.SetState(ChangeState.Instance);
-              
-            
+                if(index - 1 == (int)BattleStyleType.Legend && stat.HitGauge < 10 )
+                {
+                    return;
+                }
+
+                
+                ChangeStyle(index-1);
+
+
             }
 
 
@@ -156,7 +159,7 @@ public class PlayController : MonoBehaviour
 
         if (Mouse.current.rightButton.wasPressedThisFrame)
         {
-            if (stat.StyleIndex == 3)
+            if (stat.StyleIndex == (int)BattleStyleType.Legend)
             {
                 return null;
             }
@@ -358,7 +361,7 @@ public class PlayController : MonoBehaviour
     public void ResetSpeed()
     {
         
-        if (stat.StyleIndex == 3)
+        if (stat.StyleIndex == (int)BattleStyleType.Legend)
         {
             stat.SPEED = stat.DEFAULTSPEED;
             SetSpeed(1.3f);
@@ -378,14 +381,18 @@ public class PlayController : MonoBehaviour
     {
         playerAnimationManager.DecreaseLoopCountStart();
     }
-
-    public void ChangeStyle()
+    public void ChangeStyle(int index)
+    {
+        stat.StyleIndex = index;
+        ps.SetState(ChangeState.Instance);
+    }
+    public void SetChangeStyle()
     {
         hitboxManager.SetBox(stat.StyleIndex);
         playerAnimationManager.SetAnim(stat.StyleIndex);
         playerAnimationManager.ChangeAniCoroutine(stat.StyleIndex);
         playerSoundManager.SetSound(stat.StyleIndex);
-        if(stat.StyleIndex == 3)
+        if(stat.StyleIndex == (int)BattleStyleType.Legend)
         {
             SetSpeed(1.3f);
         }
@@ -398,7 +405,7 @@ public class PlayController : MonoBehaviour
 
         ComboReset();
         isAtk = true;
-
+        ColOn();
     }
 
     public void ColOff()
