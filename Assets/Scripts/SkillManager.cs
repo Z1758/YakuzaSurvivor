@@ -16,6 +16,7 @@ public class SkillManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI[] text;
     [SerializeField] Image[] image;
 
+
     [SerializeField] float[] typeProbability;
 
     [SerializeField] List<Skill> passiveSkills;
@@ -134,7 +135,7 @@ public class SkillManager : MonoBehaviour
 
 
             //중복 제거
-            if (passiveSkills.Count + activeSkills.Count+ spSkills.Count > 3)
+            if (passiveSkills.Count + activeSkills.Count+ spSkills.Count > 2)
             {
                
                 bool overlap = false;

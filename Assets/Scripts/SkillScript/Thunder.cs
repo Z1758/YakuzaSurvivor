@@ -58,12 +58,7 @@ public class Thunder : Skill
 
     }
 
-    public override void GetUlt()
-    {
-        StopAllCoroutines();
-        UISoundManager.Instance.PlayerUISound(ultClip);
-        BGM_Manager.Instance.ChangeBgmOnce(ultBgmClip);
-    }
+  
 
     public void ActiveSkill(GameObject obj)
     {

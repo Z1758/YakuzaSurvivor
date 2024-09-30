@@ -59,6 +59,7 @@ public class SpSkill : Skill
         if (level == 1)
         {
             UseSkill();
+            PlayUltUIAni();
         }
     }
 }

@@ -25,7 +25,7 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] Transform playerPos;
     [SerializeField] PlayController player;
-    [SerializeField] Animator anim;
+  //  [SerializeField] Animator anim;
    
    
 
@@ -44,7 +44,7 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] GameObject dieParticle;
 
-    [SerializeField] bool aniIns;
+    //[SerializeField] bool aniIns;
     [SerializeField] AnimationInstancing.AnimationInstancing ai;
 
     private void Awake()
@@ -52,7 +52,7 @@ public class Enemy : MonoBehaviour
         
 
         dieParticle = Instantiate(es.stats.yenParticle);
-        
+        ai = GetComponent<AnimationInstancing.AnimationInstancing>();
         agent = GetComponent<NavMeshAgent>();
         playerPos = GameObject.FindGameObjectWithTag("Player").transform;
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayController>();
@@ -152,16 +152,17 @@ public class Enemy : MonoBehaviour
 
              agent.CalculatePath(playerPos.position, navMeshPath);
 
-
-            // 수정
+            ai.PlayAnimation("Run");
+            /*
             if (aniIns)
             {
+                
                 ai.PlayAnimation("Run");
             }
             else
             {
                 anim.SetInteger("AniInt", EnumConvert<int>.Cast(AniState.Run));
-            }
+            }*/
 
            // agent.SetDestination(player.position);
           
@@ -194,7 +195,8 @@ public class Enemy : MonoBehaviour
         agent.enabled = false;
         obstacle.enabled = true;
 
-
+        ai.PlayAnimation("Idle");
+        /*
         // 수정
         if (aniIns)
         {
@@ -204,7 +206,7 @@ public class Enemy : MonoBehaviour
         {
             anim.SetInteger("AniInt", EnumConvert<int>.Cast(AniState.Idle));
         }
-
+        */
         while (atkCooldown > 0)
         {
             yield return CachingWFS.Instance.enemyWFS;
@@ -232,6 +234,9 @@ public class Enemy : MonoBehaviour
     {
         transform.LookAt(playerPos.position);
         PlayVoice(es.stats.atkVoice);
+
+        ai.PlayAnimation("Atk");
+        /*
         // 수정
         if (aniIns)
         {
@@ -240,7 +245,7 @@ public class Enemy : MonoBehaviour
         else
         {
             anim.Play("Atk");
-        }
+        }*/
         yield return CachingWFS.Instance.atkHitWFS[es.stats.type];
         atkCooldown = es.stats.defaultAtkCooldown;
         if (cooldown != null)
@@ -265,6 +270,8 @@ public class Enemy : MonoBehaviour
     public IEnumerator RangeAttackCorutine(GameObject bullet)
     {
         transform.LookAt(playerPos.position);
+        ai.PlayAnimation("Atk");
+        /*
         // 수정
         if (aniIns)
         {
@@ -273,7 +280,7 @@ public class Enemy : MonoBehaviour
         else
         {
             anim.Play("Atk");
-        }
+        }*/
         yield return CachingWFS.Instance.atkHitWFS[es.stats.type];
         atkCooldown = es.stats.defaultAtkCooldown;
         if (cooldown != null)
@@ -312,6 +319,9 @@ public class Enemy : MonoBehaviour
 
     IEnumerator HitCorutine()
     {
+        ai.Pause();
+        ai.PlayAnimation("Hit");
+        /*
         // 수정
         if (aniIns)
         {
@@ -321,6 +331,7 @@ public class Enemy : MonoBehaviour
         {
             anim.SetTrigger("OnHit");
         }
+        */
         yield return CachingWFS.Instance.enemyHitWFS;
 
         Idle();
@@ -328,7 +339,14 @@ public class Enemy : MonoBehaviour
 
     IEnumerator DownCorutine()
     {
-
+        ai.Pause();
+        ai.PlayAnimation("Down2");
+        yield return CachingWFS.Instance.enemyDownInsWFS;
+        ai.PlayAnimation("StandUp");
+        yield return CachingWFS.Instance.enemyStandUpInsWFS;
+        isDown = false;
+        Idle();
+        /*
         // 수정
         if (aniIns)
         {
@@ -347,7 +365,7 @@ public class Enemy : MonoBehaviour
             Idle();
 
         }
-
+        */
     }
 
   
@@ -394,6 +412,11 @@ public class Enemy : MonoBehaviour
                 }
             }
         }
+    }
+
+    public int GetEXP()
+    {
+        return es.stats.exp;
     }
 
 }

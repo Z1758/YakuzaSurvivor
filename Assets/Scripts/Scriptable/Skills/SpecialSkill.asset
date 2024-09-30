@@ -16,5 +16,7 @@ MonoBehaviour:
   explain:
   - "\uD638\uB5A8"
   image: {fileID: 21300000, guid: edc9794a1eca0964383f9da71b90bba4, type: 3}
+  ultImage: {fileID: 0}
+  ultUIImage: {fileID: 21300000, guid: 38f1a2537a79e3241b310af97c0e0836, type: 3}
   maxLevel: 1
   type: 2
