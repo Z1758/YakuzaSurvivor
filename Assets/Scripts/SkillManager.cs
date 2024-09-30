@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
+
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +15,7 @@ public class SkillManager : MonoBehaviour
 
     [SerializeField] TextMeshProUGUI[] text;
     [SerializeField] Image[] image;
+
 
     [SerializeField] float[] typeProbability;
 
@@ -134,7 +135,7 @@ public class SkillManager : MonoBehaviour
 
 
             //중복 제거
-            if (passiveSkills.Count + activeSkills.Count+ spSkills.Count > 3)
+            if (passiveSkills.Count + activeSkills.Count+ spSkills.Count > 2)
             {
                
                 bool overlap = false;

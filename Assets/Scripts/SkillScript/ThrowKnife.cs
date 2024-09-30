@@ -71,12 +71,7 @@ public class ThrowKnife : Skill
         }
     }
 
-    public override void GetUlt()
-    {
-        StopAllCoroutines();
-        UISoundManager.Instance.PlayerUISound(ultClip);
-        BGM_Manager.Instance.ChangeBgmOnce(ultBgmClip);
-    }
+
 
     IEnumerator ThrowingCoroutine()
     {

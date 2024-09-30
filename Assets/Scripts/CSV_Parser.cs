@@ -18,32 +18,13 @@ public class CSV_Parser : MonoBehaviour
 
 
 
-
     private void Awake()
     {
-#if UNITY_EDITOR
-        // 프로젝트 경로 => 게임 제작 중 사용
-        string path = $"{Application.dataPath}/CSV";
-#else
-        // 개인 로컬 저장소 경로 => 게임 제작 완료 후 주로 세이브 파일 저장
-        string persPath = Application.persistentDataPath;
-        
-#endif
-
-
-        if (Directory.Exists(path) == false)
-        {
-            Debug.LogError("경로가 없습니다");
-            return;
-        }
-
-        if (File.Exists($"{path}/Stage.csv") == false)
-        {
-            Debug.LogError("파일이 없습니다");
-            return;
-        }
+        TextAsset csv = Resources.Load<TextAsset>("CSV/Stage") ;
+     
+       
  
-        string file = File.ReadAllText($"{path}/Stage.csv");
+        string file = csv.text;
         string[] lines = file.Split('\n');
 
         for (int i = 1; i < lines.Length; i++)

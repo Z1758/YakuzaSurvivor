@@ -12,6 +12,7 @@ public class SkillInfo : ScriptableObject
     [SerializeField] public string[] explain;
     [SerializeField] public Sprite image;
     [SerializeField] public Sprite ultImage;
+    [SerializeField] public Sprite ultUIImage;
     [SerializeField] public int maxLevel;
     [SerializeField] public SkillType type;
 

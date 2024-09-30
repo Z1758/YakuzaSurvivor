@@ -18,8 +18,8 @@ MonoBehaviour:
   exp: 10
   type: 0
   delay: 0.2
-  atkHitTime: 0.3
-  atkEndTime: 1
+  atkHitTime: 0.26
+  atkEndTime: 0.9
   defaultAtkCooldown: 3
   appearVoice: {fileID: 8300000, guid: d2be58e8ec869214f9d75d83409d3755, type: 3}
   atkVoice: {fileID: 8300000, guid: fa640438c08d8eb45b9c37bfe1b5e591, type: 3}

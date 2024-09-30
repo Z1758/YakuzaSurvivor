@@ -20,5 +20,6 @@ MonoBehaviour:
   - "\uC2A4\uD0AC3 \uAD81\uADF9"
   image: {fileID: 21300000, guid: 8fc6f1ebab80ff24f9820b786efadfaa, type: 3}
   ultImage: {fileID: 21300000, guid: c0f7e3ea6aa79374f987e3a5c41ab6be, type: 3}
+  ultUIImage: {fileID: 21300000, guid: 8c878212f30d7ed44805e00b19c8d178, type: 3}
   maxLevel: 4
   type: 1

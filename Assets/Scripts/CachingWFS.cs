@@ -7,6 +7,8 @@ public class CachingWFS : MonoBehaviour
     private static CachingWFS instance;
     public WaitForSeconds enemyWFS;
     public WaitForSeconds enemyDownWFS;
+    public WaitForSeconds enemyDownInsWFS;
+    public WaitForSeconds enemyStandUpInsWFS;
     public WaitForSeconds enemyHitWFS;
 
     public EnemyStats[] enemyStats;
@@ -43,6 +45,8 @@ public class CachingWFS : MonoBehaviour
     {
         enemyWFS = new WaitForSeconds(0.2f);
         enemyDownWFS = new WaitForSeconds(4.6f);
+        enemyDownInsWFS = new WaitForSeconds(3.1f);
+        enemyStandUpInsWFS = new WaitForSeconds(1.5f);
         enemyHitWFS = new WaitForSeconds(0.6f);
 
         atkHitWFS = new WaitForSeconds[enemyStats.Length];

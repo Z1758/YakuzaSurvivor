@@ -46,7 +46,7 @@ public class Zone : Skill
         if (level == info.maxLevel)
         {
             GetUlt();
-
+          
 
             zone.SetActive(false);
 
@@ -61,12 +61,7 @@ public class Zone : Skill
         zone.transform.localScale = new Vector3(zone.transform.localScale.x + scale, zone.transform.localScale.y, zone.transform.localScale.z + scale);
     }
 
-    public override void GetUlt()
-    {
-        StopAllCoroutines();
-        UISoundManager.Instance.PlayerUISound(ultClip);
-        BGM_Manager.Instance.ChangeBgmOnce(ultBgmClip);
-    }
+  
     IEnumerator ActiveZone(GameObject obj)
     {
         while (true)

@@ -25,7 +25,7 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] Transform playerPos;
     [SerializeField] PlayController player;
-    [SerializeField] Animator anim;
+  //  [SerializeField] Animator anim;
    
    
 
@@ -44,13 +44,15 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] GameObject dieParticle;
 
-
+    //[SerializeField] bool aniIns;
+    [SerializeField] AnimationInstancing.AnimationInstancing ai;
 
     private void Awake()
     {
+        
 
         dieParticle = Instantiate(es.stats.yenParticle);
-        
+        ai = GetComponent<AnimationInstancing.AnimationInstancing>();
         agent = GetComponent<NavMeshAgent>();
         playerPos = GameObject.FindGameObjectWithTag("Player").transform;
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayController>();
@@ -59,11 +61,6 @@ public class Enemy : MonoBehaviour
  
 
 
-    private void OnEnable()
-    {
-       
-
-    }
 
     public void ActiveEnemy()
     {
@@ -154,11 +151,19 @@ public class Enemy : MonoBehaviour
         {
 
              agent.CalculatePath(playerPos.position, navMeshPath);
-            
-             
-            
 
-            anim.SetInteger("AniInt", EnumConvert<int>.Cast(AniState.Run));
+            ai.PlayAnimation("Run");
+            /*
+            if (aniIns)
+            {
+                
+                ai.PlayAnimation("Run");
+            }
+            else
+            {
+                anim.SetInteger("AniInt", EnumConvert<int>.Cast(AniState.Run));
+            }*/
+
            // agent.SetDestination(player.position);
           
             
@@ -190,7 +195,18 @@ public class Enemy : MonoBehaviour
         agent.enabled = false;
         obstacle.enabled = true;
 
-        anim.SetInteger("AniInt", EnumConvert<int>.Cast(AniState.Idle));
+        ai.PlayAnimation("Idle");
+        /*
+        // 수정
+        if (aniIns)
+        {
+            ai.PlayAnimation("Idle");
+        }
+        else
+        {
+            anim.SetInteger("AniInt", EnumConvert<int>.Cast(AniState.Idle));
+        }
+        */
         while (atkCooldown > 0)
         {
             yield return CachingWFS.Instance.enemyWFS;
@@ -218,7 +234,18 @@ public class Enemy : MonoBehaviour
     {
         transform.LookAt(playerPos.position);
         PlayVoice(es.stats.atkVoice);
-        anim.Play("Atk");
+
+        ai.PlayAnimation("Atk");
+        /*
+        // 수정
+        if (aniIns)
+        {
+            ai.PlayAnimation("Atk");
+        }
+        else
+        {
+            anim.Play("Atk");
+        }*/
         yield return CachingWFS.Instance.atkHitWFS[es.stats.type];
         atkCooldown = es.stats.defaultAtkCooldown;
         if (cooldown != null)
@@ -243,7 +270,17 @@ public class Enemy : MonoBehaviour
     public IEnumerator RangeAttackCorutine(GameObject bullet)
     {
         transform.LookAt(playerPos.position);
-        anim.Play("Atk");
+        ai.PlayAnimation("Atk");
+        /*
+        // 수정
+        if (aniIns)
+        {
+            ai.PlayAnimation("Atk");
+        }
+        else
+        {
+            anim.Play("Atk");
+        }*/
         yield return CachingWFS.Instance.atkHitWFS[es.stats.type];
         atkCooldown = es.stats.defaultAtkCooldown;
         if (cooldown != null)
@@ -282,9 +319,19 @@ public class Enemy : MonoBehaviour
 
     IEnumerator HitCorutine()
     {
-       
-        anim.SetTrigger("OnHit");
-       
+        ai.Pause();
+        ai.PlayAnimation("Hit");
+        /*
+        // 수정
+        if (aniIns)
+        {
+            ai.PlayAnimation("Hit");
+        }
+        else
+        {
+            anim.SetTrigger("OnHit");
+        }
+        */
         yield return CachingWFS.Instance.enemyHitWFS;
 
         Idle();
@@ -292,13 +339,33 @@ public class Enemy : MonoBehaviour
 
     IEnumerator DownCorutine()
     {
-       
-
-        anim.SetTrigger("OnDown");
-        yield return CachingWFS.Instance.enemyDownWFS;
+        ai.Pause();
+        ai.PlayAnimation("Down2");
+        yield return CachingWFS.Instance.enemyDownInsWFS;
+        ai.PlayAnimation("StandUp");
+        yield return CachingWFS.Instance.enemyStandUpInsWFS;
         isDown = false;
         Idle();
+        /*
+        // 수정
+        if (aniIns)
+        {
+            ai.PlayAnimation("Down2");
+            yield return CachingWFS.Instance.enemyDownInsWFS;
+            ai.PlayAnimation("StandUp");
+            yield return CachingWFS.Instance.enemyStandUpInsWFS;
+            isDown = false;
+            Idle();
 
+        }
+        else { 
+          anim.SetTrigger("OnDown");
+            yield return CachingWFS.Instance.enemyDownWFS;
+            isDown = false;
+            Idle();
+
+        }
+        */
     }
 
   
@@ -345,6 +412,11 @@ public class Enemy : MonoBehaviour
                 }
             }
         }
+    }
+
+    public int GetEXP()
+    {
+        return es.stats.exp;
     }
 
 }
