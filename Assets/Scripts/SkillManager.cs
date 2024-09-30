@@ -32,12 +32,21 @@ public class SkillManager : MonoBehaviour
     [SerializeField] int activeSkillCount;
 
     [SerializeField] int skillPoint;
- 
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+
+
+            LevelUP();
+        }
+    }
     public int GetSkillPoint()
     {
         return skillPoint;
     }
+
 
     private void Awake()
     {
@@ -65,15 +74,7 @@ public class SkillManager : MonoBehaviour
         }
 
     }
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space) )
-        {
-            
-            
-            LevelUP();
-        }
-    }
+   
 
     public void LevelUP()
     {

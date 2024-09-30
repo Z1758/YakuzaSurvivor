@@ -168,7 +168,8 @@ public class MobPool : MonoBehaviour
         }
 
         PlayerStat.Instance.HitGauge += 0.5f;
-        PlayerStat.Instance.EXP += me.GetEXP();
+        
+        PlayerStat.Instance.EXP = me.GetEXP();
 
         queue[type].Enqueue(mob);
         activeMob.Remove(mob);
