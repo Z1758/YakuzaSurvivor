@@ -52,11 +52,11 @@ public class PlayerStat : MonoBehaviour
     public int MaxHP { get { return maxHP; } }
     public UnityAction<int> OnHPChanged;
 
-    public int EXP { get { return exp; } set { exp = value; OnEXPChanged?.Invoke(exp); } }
-    public int MaxEXP { get { return maxExp; } }
+    public int EXP { get { return exp; } set { if (exp + value >= maxExp) {  exp -= maxExp - value; SkillManager.Instance.LevelUP(); MaxEXP += 50; } else { exp += value; } OnEXPChanged?.Invoke(exp); } }
+    public int MaxEXP { get { return maxExp; } set { maxExp = value; OnMaxEXPChanged?.Invoke(maxExp); } }
     public UnityAction<int> OnEXPChanged;
-
-    public float HitGauge { get { return hitGauge; } set { hitGauge = value; OnHitGaugeChanged?.Invoke(hitGauge); } }
+    public UnityAction<int> OnMaxEXPChanged;
+    public float HitGauge { get { return hitGauge; } set { if (hitGauge >= 100) return; hitGauge = value; OnHitGaugeChanged?.Invoke(hitGauge); } }
     public float MaxHitGauge { get { return maxHitGauge; } }
     public UnityAction<float> OnHitGaugeChanged;
 

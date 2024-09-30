@@ -44,4 +44,11 @@ public class Skill : MonoBehaviour
         uiUltAniImage.sprite = info.ultUIImage;
         uiUltAniImage.gameObject.SetActive(true);
     }
+
+    public virtual void StopSkill()
+    {
+        StopAllCoroutines();
+        if(ult!=null)
+        ult.SetActive(false);
+    }
 }

@@ -4,6 +4,7 @@ using TMPro;
 using Unity.VisualScripting;
 
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class SkillManager : MonoBehaviour
@@ -32,12 +33,25 @@ public class SkillManager : MonoBehaviour
     [SerializeField] int activeSkillCount;
 
     [SerializeField] int skillPoint;
- 
 
+
+    public UnityAction StopSkills;
+
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            GameManager.Instance.Clear();
+
+           // LevelUP();
+        }
+    }
     public int GetSkillPoint()
     {
         return skillPoint;
     }
+
 
     private void Awake()
     {
@@ -65,15 +79,7 @@ public class SkillManager : MonoBehaviour
         }
 
     }
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space) )
-        {
-            
-            
-            LevelUP();
-        }
-    }
+   
 
     public void LevelUP()
     {
@@ -211,6 +217,8 @@ public class SkillManager : MonoBehaviour
         if (resultSkills[select].info.type == SkillType.Active && resultSkills[select].level == 1)
         {
             activeSkillCount++;
+
+            StopSkills += resultSkills[select].StopSkill;
 
             if(activeSkillCount >= 3)
             {
