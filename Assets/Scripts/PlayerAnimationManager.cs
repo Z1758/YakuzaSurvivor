@@ -48,7 +48,7 @@ public class PlayerAnimationManager : MonoBehaviour
         if (curStyle.weapon != null)
         {
             curStyle.weapon.SetActive(true);
-            if(index == 3)
+            if(index == (int)BattleStyleType.Legend )
             {
                 CharacterTrail.Instance.OnDaggerTrail();
             }
@@ -80,7 +80,7 @@ public class PlayerAnimationManager : MonoBehaviour
 
         if (type)
         {
-            if (PlayerStat.Instance.StyleIndex == 3)
+            if (PlayerStat.Instance.StyleIndex == (int)BattleStyleType.Legend)
             {
                 player.ColOff();
             }
@@ -106,7 +106,7 @@ public class PlayerAnimationManager : MonoBehaviour
         yield return time;
 
         player.AtkStateChange();
-        if (PlayerStat.Instance.StyleIndex == 3)
+        if (PlayerStat.Instance.StyleIndex == (int)BattleStyleType.Legend)
         {
             player.ColOn();
         }

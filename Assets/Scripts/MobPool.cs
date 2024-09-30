@@ -6,11 +6,15 @@ public class MobPool : MonoBehaviour
 {
   
     [SerializeField] CSV_Parser csv;
+
     [SerializeField] Transform[] spawnPoints;
     public static MobPool Instance { get; private set; }
     [SerializeField] GameObject[] prefabs;
     [SerializeField] int[] poolSize;
     Queue<GameObject>[] queue;
+    [SerializeField] AnimationInstancing.AnimationInstancing[] proto;
+
+
 
     public List<GameObject> activeMob;
 
@@ -30,6 +34,7 @@ public class MobPool : MonoBehaviour
         }
 
         csv = GetComponent<CSV_Parser>();
+       
 
         activeMob = new List<GameObject>();
 
@@ -40,7 +45,9 @@ public class MobPool : MonoBehaviour
         {
             queue[i] = new Queue<GameObject>();
         }
-        
+
+     
+       
 
        for (int i = 0; i < prefabs.Length; i++)
         {
@@ -48,6 +55,12 @@ public class MobPool : MonoBehaviour
             for (int y = 0; y < poolSize[i]; y++)
             {
                 GameObject m = Instantiate(prefabs[i]);
+                
+                if (m.TryGetComponent(out AnimationInstancing.AnimationInstancing p))
+                {
+                    p.prototype = proto[i].prototype;
+                }
+
                 m.SetActive(false);
 
                
@@ -114,6 +127,7 @@ public class MobPool : MonoBehaviour
             {
                 me.ActiveEnemy();
                 me.dieEvent += ReturnPool;
+              
             }
 
             
@@ -123,6 +137,12 @@ public class MobPool : MonoBehaviour
         else
         {
             GameObject m = Instantiate(prefabs[type]);
+            if (m.TryGetComponent(out AnimationInstancing.AnimationInstancing p))
+            {
+                p.prototype = proto[type].prototype;
+            }
+
+
             m.transform.position = spawnPoints[ran].position;
             if (m.TryGetComponent<Enemy>(out Enemy me))
             {
@@ -138,14 +158,17 @@ public class MobPool : MonoBehaviour
     void ReturnPool(GameObject mob, int type)
     {
 
+  
 
         if (mob.TryGetComponent<Enemy>(out Enemy me))
         {
            
             me.dieEvent -= ReturnPool;
+        
         }
 
-     
+        PlayerStat.Instance.HitGauge += 0.5f;
+        PlayerStat.Instance.EXP += me.GetEXP();
 
         queue[type].Enqueue(mob);
         activeMob.Remove(mob);
@@ -157,8 +180,10 @@ public class MobPool : MonoBehaviour
 
     IEnumerator DisableEnemy(GameObject mob )
     {
+     
+        
         yield return disableDelay;
-
+        ItemManager.Instance.CreateItem(mob.transform.position);
         mob.SetActive(false);
     }
 }
