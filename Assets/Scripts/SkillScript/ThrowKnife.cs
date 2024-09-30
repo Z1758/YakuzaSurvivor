@@ -17,6 +17,7 @@ public class ThrowKnife : Skill
 
     private void Awake()
     {
+
         count = info.maxLevel+1;
         onDelay = new WaitForSeconds(0.2f);
         offDelay = new WaitForSeconds(1.5f);
@@ -33,11 +34,14 @@ public class ThrowKnife : Skill
             knife.returnEvent += ReturnKnife;
             knives.Enqueue(knife);
         }
+
+        
     }
 
     private void Start()
     {
         UseSkill();
+        SkillManager.Instance.StopSkills += StopSkill;
     }
 
     public override void UseSkill()

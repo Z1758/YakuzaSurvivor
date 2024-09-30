@@ -187,4 +187,13 @@ public class MobPool : MonoBehaviour
         ItemManager.Instance.CreateItem(mob.transform.position);
         mob.SetActive(false);
     }
+
+    public void AllStopEnemy()
+    {
+        StopAllCoroutines();
+        foreach (GameObject m in activeMob)
+        {
+            m.gameObject.SetActive(false);
+        }
+    }
 }

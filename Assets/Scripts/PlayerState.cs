@@ -1,4 +1,6 @@
 
+using UnityEngine;
+
 public class PlayerState
 {
     private State playerState;
@@ -64,6 +66,11 @@ public class IdleState : State
         }
     }
 
+    public override void Dispose()
+    {
+        instance = null;
+    }
+
     public override void EnterState()
     {
         controller.anim.SetInteger("AniInt", EnumConvert<int>.Cast(AniState.Idle));
@@ -118,6 +125,13 @@ public class MoveState : State
         controller.Move();
         controller.Rotate();
     }
+
+
+    public override void Dispose()
+    {
+        instance = null;
+    }
+
 }
 
 public class AttackState : State
@@ -161,6 +175,13 @@ public class AttackState : State
     {
 
     }
+
+
+    public override void Dispose()
+    {
+        instance = null;
+    }
+
 }
 
 public class FinishAttackState : State
@@ -201,6 +222,13 @@ public class FinishAttackState : State
     {
 
     }
+
+
+    public override void Dispose()
+    {
+        instance = null;
+    }
+
 }
 public class LoopAttackState : State
 {
@@ -289,6 +317,13 @@ public class LoopAttackState : State
         isMove = false;
     }
 
+
+    public override void Dispose()
+    {
+        instance = null;
+    }
+
+
 }
 public class InputWaitState : State
 {
@@ -341,6 +376,12 @@ public class InputWaitState : State
         return tempState;
     }
 
+
+    public override void Dispose()
+    {
+        instance = null;
+    }
+
 }
 public class ChangeState : State
 {
@@ -383,5 +424,63 @@ public class ChangeState : State
     {
 
     }
+
+    public override void Dispose()
+    {
+        instance = null;
+    }
+
+}
+
+
+public class DeadState : State
+{
+
+    private static DeadState instance;
+
+
+
+    public DeadState(PlayController controller) : base(controller)
+    {
+        if (instance == null)
+        {
+            instance = this;
+
+        }
+
+    }
+
+    public static DeadState Instance
+    {
+        get
+        {
+            return instance;
+        }
+    }
+
+    public override void EnterState()
+    {
+        controller.anim.SetTrigger("Dead");
+        controller.ColOff();
+        GameManager.Instance.GameOver();
+
+    }
+
+    public override void ExitState()
+    {
+
+    }
+
+    public override void UpdateState()
+    {
+
+    }
+
+
+    public override void Dispose()
+    {
+        instance = null;
+    }
+
 }
 
