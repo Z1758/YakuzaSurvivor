@@ -173,11 +173,10 @@ public class SkillManager : MonoBehaviour
 
         SetSkillUI();
 
-        Cursor.lockState = CursorLockMode.None;
-
-        Cursor.visible = true;
+        GameManager.Instance.Pause();
+       
         selectUI.SetActive(true);
-        Time.timeScale = 0;
+    
     }
 
     public void SetSkillUI()

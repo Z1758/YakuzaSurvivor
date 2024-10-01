@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -13,6 +14,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] PlayController controller;
     [SerializeField] PlayerInput input;
     [SerializeField] GameObject UI_s;
+    [SerializeField] GameObject UI_pause;
     [SerializeField] GameObject gameoverCamera;
     [SerializeField] GameObject button;
     
@@ -85,10 +87,42 @@ public class GameManager : MonoBehaviour
     {
         if (value.started)
         {
-
-            Debug.Log("일시정지");
+            
+            if (Time.timeScale > 0.8f)
+            {
+                UI_pause.SetActive(true);
+                Pause();
+            }
         }
 
+    }
+
+    public void Pause()
+    {
+        if (Time.timeScale > 0.8f)
+        {
+
+            Cursor.lockState = CursorLockMode.None;
+
+            Cursor.visible = true;
+
+            Time.timeScale = 0;
+            Debug.Log("일시정지");
+        }
+    }
+
+    public void Resume()
+    {
+        if (Time.timeScale == 0)
+        {
+            UI_pause.SetActive(false);
+            Cursor.lockState = CursorLockMode.Locked;
+
+            Cursor.visible = false;
+
+            Time.timeScale = 1.0f;
+            Debug.Log("일시정지 해제");
+        }
     }
 
     public void LoadTilteScene()
