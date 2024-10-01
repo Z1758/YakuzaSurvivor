@@ -38,15 +38,6 @@ public class SkillManager : MonoBehaviour
     public UnityAction StopSkills;
 
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            GameManager.Instance.Clear();
-
-           // LevelUP();
-        }
-    }
     public int GetSkillPoint()
     {
         return skillPoint;

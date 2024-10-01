@@ -46,6 +46,8 @@ public class PlayController : MonoBehaviour
 
     List<State> states;
 
+    public GameObject aura;
+
     private void Start()
     {
         psc = GetComponent<PlayerStatController>();
@@ -160,8 +162,8 @@ public class PlayController : MonoBehaviour
     {
 
     
-
-        ps.Update();
+        
+        ps?.Update();
 
 
 
@@ -410,9 +412,11 @@ public class PlayController : MonoBehaviour
         if(stat.StyleIndex == (int)BattleStyleType.Legend)
         {
             SetSpeed(1.3f);
+            aura.SetActive(true);
         }
         else
         {
+            aura.SetActive(false);
             changedSpeed=false;
             ResetSpeed();
 
@@ -461,7 +465,10 @@ public class PlayController : MonoBehaviour
 
     public void End()
     {
+        ps = null;
+        anim.Play("Idle");
         psc.StopAllCoroutines();
+        playerAnimationManager.StopAllCoroutines();
         cc.enabled = false;
         Time.timeScale = 1.0f;
         

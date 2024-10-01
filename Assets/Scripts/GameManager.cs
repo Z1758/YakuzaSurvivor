@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
@@ -12,12 +14,16 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] TimeLineScript tls;
     [SerializeField] PlayController controller;
+    [SerializeField] GameObject defaultSkill;
     [SerializeField] PlayerInput input;
     [SerializeField] GameObject UI_s;
     [SerializeField] GameObject UI_pause;
     [SerializeField] GameObject gameoverCamera;
     [SerializeField] GameObject button;
-    
+    [SerializeField] WaitForSeconds timerWFS;
+    [SerializeField] int timerCount;
+    [SerializeField] TextMeshProUGUI timerText;
+
     private void Awake()
     {
         if (null == instance)
@@ -43,6 +49,17 @@ public class GameManager : MonoBehaviour
 
     }
 
+
+    public void StartGame()
+    {
+        timerWFS = new WaitForSeconds(1.0f);
+        StartCoroutine(ClearTimer());
+        UI_s.SetActive(true);
+    
+        controller.SetChangeStyle();
+        input.enabled = true;
+        defaultSkill.SetActive(true);
+    }
     public void Clear()
     {
         StopObjects();
@@ -65,6 +82,19 @@ public class GameManager : MonoBehaviour
         GameEnd();
     }
 
+    IEnumerator ClearTimer()
+    {
+        timerText.text = timerCount.ToString();
+        while (timerCount>0)
+        {
+            yield return timerWFS;
+            timerCount--;
+            timerText.text = timerCount.ToString();
+        }
+
+        Clear();
+    }
+
     public void GameOver()
     {
 
@@ -81,6 +111,7 @@ public class GameManager : MonoBehaviour
         input.enabled = false;
         MobPool.Instance.AllStopEnemy();
         SkillManager.Instance.StopSkills?.Invoke();
+        StopAllCoroutines();
     }
 
     public void PauseGame(InputAction.CallbackContext value)
