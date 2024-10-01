@@ -6,8 +6,7 @@ using UnityEngine.Playables;
 
 public class TimeLineScript : MonoBehaviour
 {
-    [SerializeField] PlayerInput pi;
-    [SerializeField] PlayController pc;
+  
     [SerializeField] PlayableDirector pd;
 
     [SerializeField] PlayableAsset clearPB;
@@ -16,12 +15,7 @@ public class TimeLineScript : MonoBehaviour
         pd = GetComponent<PlayableDirector>();
     }
 
-    public void StartGame()
-    {
-        pc.SetChangeStyle();
-        pi.enabled = true;
-    }
-
+    
     public void StartClear()
     {
         pd.playableAsset = clearPB;

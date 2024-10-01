@@ -15,7 +15,7 @@ MonoBehaviour:
   maxHp: 30
   atk: 5
   range: 1.5
-  exp: 20
+  exp: 10
   type: 0
   delay: 0.2
   atkHitTime: 0.26
