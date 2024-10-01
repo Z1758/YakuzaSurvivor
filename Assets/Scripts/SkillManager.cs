@@ -13,7 +13,7 @@ public class SkillManager : MonoBehaviour
     const int maxLevel = 4;
 
     [SerializeField] GameObject selectUI;
-
+    [SerializeField] GameObject[] selectedUI;
     [SerializeField] TextMeshProUGUI[] text;
     [SerializeField] Image[] image;
 
@@ -27,8 +27,9 @@ public class SkillManager : MonoBehaviour
 
 
     [SerializeField] List<Skill> resultSkills;
+    [SerializeField] Skill selectSkill;
 
- 
+
 
     [SerializeField] int activeSkillCount;
 
@@ -199,18 +200,45 @@ public class SkillManager : MonoBehaviour
     public void SelectSkill(int select)
     {
 
+        selectSkill = resultSkills[select];
+
+        for (int i = 0; i < 3; i++)
+        {
+            if(i==select)
+                selectedUI[i].SetActive(true);
+            else
+                selectedUI[i].SetActive(false);
+        }
+
+
+    }
+
+    public void ConfirmSelection()
+    {
+        if (selectSkill == null)
+        {
+            return;
+        }
+
         selectUI.SetActive(false);
 
-        resultSkills[select].SkillLevelUp();
+
+        for (int i = 0; i < 3; i++)
+        {
+                selectedUI[i].SetActive(false);
+        }
+
+
+        selectSkill.SkillLevelUp();
 
         // 최대 액티브 스킬 개수 달성시 나머지 제거
-        if (resultSkills[select].info.type == SkillType.Active && resultSkills[select].level == 1)
+        if (selectSkill.info.type == SkillType.Active && selectSkill.level == 1)
         {
             activeSkillCount++;
 
-            StopSkills += resultSkills[select].StopSkill;
+            StopSkills += selectSkill.StopSkill;
 
-            if(activeSkillCount >= 3)
+            if (activeSkillCount >= 3)
             {
                 List<Skill> tempList = new List<Skill>();
                 foreach (Skill s in activeSkills)
@@ -234,19 +262,19 @@ public class SkillManager : MonoBehaviour
         }
 
         // 최대 레벨 달성시 리스트에서 제거
-        if (resultSkills[select].level >= resultSkills[select].info.maxLevel)
+        if (selectSkill.level >= selectSkill.info.maxLevel)
         {
-            switch (resultSkills[select].info.type)
+            switch (selectSkill.info.type)
             {
                 case SkillType.Passive:
-                    passiveSkills.Remove(resultSkills[select]);
-                   
+                    passiveSkills.Remove(selectSkill);
+
                     break;
                 case SkillType.Active:
-                    activeSkills.Remove(resultSkills[select]);
+                    activeSkills.Remove(selectSkill);
                     break;
                 case SkillType.Sp:
-                    spSkills.Remove(resultSkills[select]);
+                    spSkills.Remove(selectSkill);
                     break;
             }
         }
@@ -254,21 +282,22 @@ public class SkillManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
 
         Cursor.visible = false;
- 
+
         resultSkills.Clear();
 
         skillPoint--;
-       
+
 
         Time.timeScale = 1.0f;
 
-        if(skillPoint > 0)
+        if (skillPoint > 0)
         {
             SetSelect();
         }
 
-    }
+        selectSkill = null;
 
+    }
 
     public int GetProbability(float[] probabilit)
     {

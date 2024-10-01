@@ -46,7 +46,6 @@ public class PlayController : MonoBehaviour
 
     List<State> states;
 
-    public GameObject aura;
 
     private void Start()
     {
@@ -412,11 +411,11 @@ public class PlayController : MonoBehaviour
         if(stat.StyleIndex == (int)BattleStyleType.Legend)
         {
             SetSpeed(1.3f);
-            aura.SetActive(true);
+      
         }
         else
         {
-            aura.SetActive(false);
+          
             changedSpeed=false;
             ResetSpeed();
 
