@@ -1,9 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static PlayController;
 public class PlayerStatController : MonoBehaviour
 {
     [SerializeField] PlayController controller;
@@ -21,6 +18,7 @@ public class PlayerStatController : MonoBehaviour
         model.OnHPChanged += UpdateHP;
         model.OnStyleChanged += UpdateStyle;
         model.OnEXPChanged += UpdateEXP;
+        model.OnMaxEXPChanged += UpdateMaxEXP;
         model.OnHitGaugeChanged += UpdateHitGauge;
 
     }
@@ -29,6 +27,7 @@ public class PlayerStatController : MonoBehaviour
         model.OnHPChanged -= UpdateHP;
         model.OnStyleChanged -= UpdateStyle;
         model.OnEXPChanged -= UpdateEXP;
+        model.OnMaxEXPChanged -= UpdateMaxEXP;
         model.OnHitGaugeChanged -= UpdateHitGauge;
     }
 
@@ -38,12 +37,13 @@ public class PlayerStatController : MonoBehaviour
         model = GetComponent<PlayerStat>();
 
         hpSlider.maxValue = model.MaxHP;
-        expSlider.maxValue = 100;
+        expSlider.maxValue = model.MaxEXP;
         hitgaugeSlider.maxValue = 100;
 
 
         UpdateHP(model.HP);
         UpdateEXP(model.EXP);
+        UpdateMaxEXP(model.MaxEXP);
         UpdateHitGauge(model.HitGauge);
         UpdateStyle(model.StyleIndex);
 
@@ -62,8 +62,15 @@ public class PlayerStatController : MonoBehaviour
 
         expSlider.value = exp;
 
-    }
 
+    }
+    private void UpdateMaxEXP(int maxExp)
+    {
+
+        expSlider.maxValue = maxExp;
+
+
+    }
     private void UpdateHitGauge(float gauge)
     {
 
@@ -91,17 +98,17 @@ public class PlayerStatController : MonoBehaviour
         while (0 < model.HitGauge)
         {
             yield return null;
-            model.HitGauge -= Time.deltaTime * 5f ;
+            model.HitGauge -= Time.deltaTime * 5f;
             if (model.HitGauge < 0)
             {
                 model.HitGauge = 0;
             }
         }
 
-       
-       
+
+
         controller.ChangeStyle((int)BattleStyleType.Thug);
-       
+
     }
 
 }

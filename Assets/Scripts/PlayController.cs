@@ -1,5 +1,6 @@
 
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -16,6 +17,7 @@ public class PlayController : MonoBehaviour
    
     [SerializeField] private Transform cameraPos;
     [SerializeField] private PlayerStat stat;
+    [SerializeField] private PlayerStatController psc;
     [SerializeField] PlayerAnimationManager playerAnimationManager;
     [SerializeField] PlayerSoundManager playerSoundManager;
 
@@ -41,10 +43,16 @@ public class PlayController : MonoBehaviour
     public delegate bool HitEvent(Vector3 vec);
     public HitEvent hitEvent;
 
+
+    List<State> states;
+
+
     private void Start()
     {
+        psc = GetComponent<PlayerStatController>();
         stat.OnDefaultSpeedChanged += ResetSpeed;
         ResetSpeed();
+        states = new List<State>();
 
         State idle = new IdleState(this);
         State move = new MoveState(this);
@@ -53,9 +61,17 @@ public class PlayController : MonoBehaviour
         State loop = new LoopAttackState(this);
         State inputWait = new InputWaitState(this);
         State change = new ChangeState(this);
+        State dead = new DeadState(this);
         ps = new PlayerState(IdleState.Instance);
 
-
+        states.Add(idle);
+        states.Add(move);
+        states.Add(atk);
+        states.Add(fatk);
+        states.Add(loop);
+        states.Add(inputWait);
+        states.Add(change);
+        states.Add(dead);
     }
 
     public void MoveInput(InputAction.CallbackContext value)
@@ -145,8 +161,8 @@ public class PlayController : MonoBehaviour
     {
 
     
-
-        ps.Update();
+        
+        ps?.Update();
 
 
 
@@ -395,9 +411,11 @@ public class PlayController : MonoBehaviour
         if(stat.StyleIndex == (int)BattleStyleType.Legend)
         {
             SetSpeed(1.3f);
+      
         }
         else
         {
+          
             changedSpeed=false;
             ResetSpeed();
 
@@ -432,5 +450,34 @@ public class PlayController : MonoBehaviour
         
         stat.HP-=damage;
         hitboxManager.PlayerHit(vec);
+
+        if(stat.HP <= 0)
+        {
+            playerAnimationManager.SetAnim(0);
+            ps.SetState(DeadState.Instance);
+            
+       
+
+            
+        }
+    }
+
+    public void End()
+    {
+        ps = null;
+        anim.Play("Idle");
+        psc.StopAllCoroutines();
+        playerAnimationManager.StopAllCoroutines();
+        cc.enabled = false;
+        Time.timeScale = 1.0f;
+        
+        
+    }
+
+    private void OnDestroy()
+    {
+        foreach (State state in states) {
+            state.Dispose();
+                }
     }
 }

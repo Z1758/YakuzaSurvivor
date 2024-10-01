@@ -39,7 +39,7 @@ public class ItemManager : MonoBehaviour
     public void CreateItem(Vector3 vec)
     {
         int ran = Random.Range(0, 101);
-        if(0 < ran & ran <= 8 )
+        if(0 < ran & ran <= 2 )
         Instantiate(prefabs[Random.Range(0, prefabs.Length)], vec, Quaternion.identity);
     }
 }

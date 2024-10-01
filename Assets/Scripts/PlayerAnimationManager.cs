@@ -3,7 +3,7 @@ using UnityEngine;
 
 public enum AniState
 {
-    Idle = 0, Run, Atk, FAtk, LoopAtk, LoopEnd, InputWait
+    Idle = 0, Run, Atk, FAtk, LoopAtk, LoopEnd, InputWait, Die
 }
 
 public class PlayerAnimationManager : MonoBehaviour
@@ -246,5 +246,10 @@ public class PlayerAnimationManager : MonoBehaviour
     {
         if (coroutine != null)
             StopCoroutine(coroutine);
+    }
+
+    private void OnDestroy()
+    {
+        StopAllCoroutines();
     }
 }
