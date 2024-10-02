@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 201
   explain:
-  - "\uC804\uC124\uC801\uC778 \uC874\uC7AC\uB97C \uC18C\uD658"
+  - "\uB3C4\uC9C0\uB9C8\uC758 \uC6A9"
   image: {fileID: 21300000, guid: edc9794a1eca0964383f9da71b90bba4, type: 3}
   ultImage: {fileID: 0}
   ultUIImage: {fileID: 21300000, guid: 38f1a2537a79e3241b310af97c0e0836, type: 3}

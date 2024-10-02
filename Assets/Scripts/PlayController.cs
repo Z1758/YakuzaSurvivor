@@ -76,6 +76,8 @@ public class PlayController : MonoBehaviour
 
     public void MoveInput(InputAction.CallbackContext value)
     {
+    
+
         moveInputVec = value.ReadValue<Vector2>();
         InputDir();
 

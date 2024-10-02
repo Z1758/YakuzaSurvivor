@@ -7,10 +7,10 @@ public class EnemyStat : MonoBehaviour
 {
 
   
-    [SerializeField] private float hp;
+    [SerializeField] private float enemyHP;
     [SerializeField] public EnemyStats stats;
 
-    public float HP { get { return hp; } set { hp = value;} }
+    public float EnemyHP { get { return enemyHP; } set { enemyHP = value;} }
 
     private void Awake()
     {
@@ -19,7 +19,7 @@ public class EnemyStat : MonoBehaviour
 
     public void SetMaxHp()
     {
-        hp = stats.maxHp;
+        enemyHP = stats.maxHp;
     }
 
 }

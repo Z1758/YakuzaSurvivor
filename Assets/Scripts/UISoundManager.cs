@@ -6,9 +6,11 @@ public class UISoundManager : MonoBehaviour
 {
     [SerializeField] AudioSource audioSource;
 
+    [SerializeField] AudioClip selectSound;
 
     private static UISoundManager instance;
 
+  
 
     private void Awake()
     {
@@ -40,6 +42,12 @@ public class UISoundManager : MonoBehaviour
     public void PlayerUISound(AudioClip clip)
     {
         audioSource.clip = clip;
+        audioSource.Play();
+    }
+
+    public void PlayerUISound()
+    {
+        audioSource.clip = selectSound;
         audioSource.Play();
     }
 }

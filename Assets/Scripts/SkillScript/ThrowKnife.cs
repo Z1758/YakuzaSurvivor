@@ -58,7 +58,7 @@ public class ThrowKnife : Skill
         {
             gameObject.SetActive(true);
         }
-        count--;
+        count-=2;
 
         if(level == info.maxLevel)
         {

@@ -107,8 +107,9 @@ public class GameManager : MonoBehaviour
     public void StopObjects()
     {
         UI_s.SetActive(false);
-        controller.End();
         input.enabled = false;
+        controller.End();
+ 
         MobPool.Instance.AllStopEnemy();
         SkillManager.Instance.StopSkills?.Invoke();
         StopAllCoroutines();
@@ -138,7 +139,10 @@ public class GameManager : MonoBehaviour
             Cursor.visible = true;
 
             Time.timeScale = 0;
-            Debug.Log("일시정지");
+
+            input.enabled = false;
+
+   
         }
     }
 
@@ -152,7 +156,9 @@ public class GameManager : MonoBehaviour
             Cursor.visible = false;
 
             Time.timeScale = 1.0f;
-            Debug.Log("일시정지 해제");
+
+            input.enabled = true;
+
         }
     }
 

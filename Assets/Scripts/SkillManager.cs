@@ -38,6 +38,7 @@ public class SkillManager : MonoBehaviour
 
     public UnityAction StopSkills;
 
+    
 
     public int GetSkillPoint()
     {
@@ -221,7 +222,8 @@ public class SkillManager : MonoBehaviour
         }
 
         selectUI.SetActive(false);
-
+        UISoundManager.Instance.PlayerUISound();
+     
 
         for (int i = 0; i < 3; i++)
         {
@@ -279,16 +281,15 @@ public class SkillManager : MonoBehaviour
             }
         }
 
-        Cursor.lockState = CursorLockMode.Locked;
 
-        Cursor.visible = false;
 
+        GameManager.Instance.Resume();
+  
         resultSkills.Clear();
 
         skillPoint--;
 
 
-        Time.timeScale = 1.0f;
 
         if (skillPoint > 0)
         {

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cd4e2a3cf392ea40b6311d7ef717937, type: 3}
   m_Name: Enemy3
   m_EditorClassIdentifier: 
-  maxHp: 50
+  maxHp: 40
   atk: 6
   range: 1.5
   exp: 20
