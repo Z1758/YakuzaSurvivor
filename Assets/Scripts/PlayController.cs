@@ -449,7 +449,10 @@ public class PlayController : MonoBehaviour
 
             return;
         }
-        
+
+        if (stat.StyleIndex == (int)BattleStyleType.Slugger)
+           damage = damage - 1;
+
         stat.HP-=damage;
         hitboxManager.PlayerHit(vec);
 
