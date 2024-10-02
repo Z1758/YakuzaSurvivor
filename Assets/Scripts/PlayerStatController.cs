@@ -59,7 +59,7 @@ public class PlayerStatController : MonoBehaviour
 
     private void UpdateEXP(int exp)
     {
-
+        UpdateHP(model.HP);
         expSlider.value = exp;
 
 
@@ -73,14 +73,14 @@ public class PlayerStatController : MonoBehaviour
     }
     private void UpdateHitGauge(float gauge)
     {
-
+        UpdateHP(model.HP);
         hitgaugeSlider.value = gauge;
 
     }
 
     private void UpdateStyle(int num)
     {
-
+        UpdateHP(model.HP);
         styleImageUI.sprite = styleImages[num];
         if (model.StyleIndex == (int)BattleStyleType.Legend)
         {
