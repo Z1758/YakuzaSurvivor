@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -41,18 +42,17 @@ public class TitleScript : MonoBehaviour
                 }
             }
           
-            text.text = "로딩 중";
+       
+            StringBuilder sb = new StringBuilder("로딩 중");
+           
+
             for (int i = 0; i < cnt; i++)
             {
-                text.text += ".";
-
+                sb.Append(".");
+         
             }
-            
 
-
-            //target.Rotate(Vector3.forward * -speed);
-           // loadingBar.fillAmount = Mathf.Lerp(loadingBar.fillAmount, loading.progress,Time.deltaTime);
-
+            text.text = sb.ToString();
             yield return null;
         }
 

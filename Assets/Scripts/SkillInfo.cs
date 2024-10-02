@@ -9,6 +9,7 @@ public class SkillInfo : ScriptableObject
 {
    
     [SerializeField] public int id;
+    [TextArea]
     [SerializeField] public string[] explain;
     [SerializeField] public Sprite image;
     [SerializeField] public Sprite ultImage;
