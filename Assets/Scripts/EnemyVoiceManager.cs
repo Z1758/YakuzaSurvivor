@@ -56,7 +56,7 @@ public class EnemyVoiceManager : MonoBehaviour
             return;
         }
 
-        maxVoiceCount = Random.Range(0, 8);
+        maxVoiceCount = Random.Range(5, 10);
         voiceCount = 0;
 
     }
