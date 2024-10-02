@@ -17,7 +17,7 @@ MonoBehaviour:
   - "\uC2A4\uD0AC1 \uC2B5\uB4DD"
   - "\uBC1C\uC0AC \uAC04\uACA9\uC774 \uBE68\uB77C\uC9C4\uB2E4"
   - "\uBC1C\uC0AC \uAC04\uACA9\uC774 \uBE68\uB77C\uC9C4\uB2E4"
-  - "\uC804\uC124\uC801\uC778 \uC874\uC7AC\uB97C \uC18C\uD658"
+  - "\uC804\uC124\uC801\uC778 \uC778\uBB3C\uC744 \uC18C\uD658"
   image: {fileID: 21300000, guid: 8acac1b70bc382b478ff2aec352065cf, type: 3}
   ultImage: {fileID: 21300000, guid: 0a3e46729775a274faefca8bfa461ca1, type: 3}
   ultUIImage: {fileID: 21300000, guid: 11f6256974f4d3a4fa6c971e9dd352d1, type: 3}

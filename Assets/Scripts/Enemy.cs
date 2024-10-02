@@ -192,6 +192,7 @@ public class Enemy : MonoBehaviour
     {
 
         AgentReset();
+        isDown = false;
         agent.enabled = false;
         obstacle.enabled = true;
 
