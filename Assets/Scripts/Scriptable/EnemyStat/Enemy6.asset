@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Enemy6
   m_EditorClassIdentifier: 
   maxHp: 80
-  atk: 8
+  atk: 12
   range: 1.5
   exp: 40
   type: 5
