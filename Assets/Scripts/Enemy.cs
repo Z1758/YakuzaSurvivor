@@ -144,7 +144,7 @@ public class Enemy : MonoBehaviour
         obstacle.enabled = false;
         yield return CachingWFS.Instance.enemyWFS;
         agent.enabled = true;
-        
+        isDown = false;
         agent.isStopped = false;
 
         while ((playerPos.position - transform.position).sqrMagnitude > es.stats.range)
@@ -387,10 +387,10 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(float damage, HitAniType type)
     {
-        if (es.HP > 0)
+        if (es.EnemyHP > 0)
         {
-            es.HP -= damage;
-            if (es.HP <= 0)
+            es.EnemyHP -= damage;
+            if (es.EnemyHP <= 0)
             {
                 Down();
                 Die();

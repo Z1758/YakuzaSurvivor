@@ -142,7 +142,7 @@ public class GameManager : MonoBehaviour
 
             input.enabled = false;
 
-            Debug.Log("일시정지");
+   
         }
     }
 
@@ -159,7 +159,6 @@ public class GameManager : MonoBehaviour
 
             input.enabled = true;
 
-            Debug.Log("일시정지 해제");
         }
     }
 

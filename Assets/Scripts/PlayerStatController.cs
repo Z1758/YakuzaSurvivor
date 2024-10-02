@@ -52,7 +52,7 @@ public class PlayerStatController : MonoBehaviour
 
     private void UpdateHP(int hp)
     {
-
+      
         hpSlider.value = hp;
 
     }
