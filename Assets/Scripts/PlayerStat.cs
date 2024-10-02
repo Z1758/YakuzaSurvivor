@@ -52,7 +52,7 @@ public class PlayerStat : MonoBehaviour
     public int MaxHP { get { return maxHP; } }
     public UnityAction<int> OnHPChanged;
 
-    public int EXP { get { return exp; } set { if (exp + value >= maxExp) {  exp -= maxExp - value; SkillManager.Instance.LevelUP(); MaxEXP += 100; } else { exp += value; } OnEXPChanged?.Invoke(exp); } }
+    public int EXP { get { return exp; } set { if (exp + value >= maxExp) {  exp -= maxExp - value; SkillManager.Instance.LevelUP(); MaxEXP += 80; } else { exp += value; } OnEXPChanged?.Invoke(exp); } }
     public int MaxEXP { get { return maxExp; } set { maxExp = value; OnMaxEXPChanged?.Invoke(maxExp); } }
     public UnityAction<int> OnEXPChanged;
     public UnityAction<int> OnMaxEXPChanged;

@@ -11,7 +11,7 @@ public class Knife : MonoBehaviour
     [SerializeField] Rigidbody rb;
     [SerializeField] public Action<Knife> returnEvent;
     [SerializeField] float speed;
-
+    [SerializeField] float multiplier;
     Coroutine time;
 
     public WaitForSeconds knifeDurationWFS;
@@ -35,7 +35,7 @@ public class Knife : MonoBehaviour
         HitSoundManager.Instance.SkillSound(transform.position, hitClip);
 
         if (other.TryGetComponent<Enemy>(out Enemy component))
-            component.TakeDamage(PlayerStat.Instance.ATK * 0.5f , HitAniType.None);
+            component.TakeDamage(PlayerStat.Instance.ATK * multiplier, HitAniType.None);
 
         StopAllCoroutines();
         returnEvent?.Invoke(this);
